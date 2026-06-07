@@ -1,0 +1,101 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkId=397860
+*@
+@{
+}
+@using RedCloud.ViewModel;
+
+
+*@{
+    ViewData["Title"] = "Get Country";
+    IEnumerable<CountryVM> countries = (IEnumerable<CountryVM>)ViewBag.Country;
+    List<StateVM> stateList = new List<StateVM>();
+    List<CityVM> cityList = new List<CityVM>();
+
+}
+
+
+
+@Html.Partial("_CountryDropDown", countries)
+
+<div Id="states">
+
+
+    @Html.Partial("_StateDropDown", stateList)
+
+
+</div>
+
+
+
+<div Id="cities">
+
+
+    @Html.Partial("_CityDropDown", cityList)
+
+</div>
+
+
+@section Scripts
+{
+    <script>
+
+        $(document).ready(function () {
+            $('#countryDropDown').change(function () {
+                var countryId = $('#countryDropDown').val();
+                $.ajax({
+                    url: '@Url.Action("GetStateByCountryId", "Dropdown")',
+                    data: { countryId: countryId },
+                    type: 'GET',
+                    success: function (data) {
+                        $('#states').empty();
+                        $('#cityDropdown').empty();
+                        $('#cityDropdown').append("<option>Select a city</option>");
+
+                        $('#states').append(data);
+                    }
+                });
+            });
+
+
+
+        });
+
+        function getallCitys() {
+            var stateId = $('#stateDropDown').val();
+
+            $.ajax({
+
+                url: '@Url.Action("GetCityByStateId", "Dropdown")',
+                data: { stateId: stateId },
+                type: 'GET',
+                success: function (data) {
+                    $('#cities').empty();
+                    $('#cities').append(data);
+
+                }
+            });
+        }
+
+        // $(document).ready(function () {
+        //     $('#stateDropDown').change(function () {
+        //         debugger
+        //         var stateId = $('#stateDropDown').val();
+        //         $.ajax({
+
+        //             url: '@Url.Action("GetCityByStateId", "Home")',
+        //             data: { stateId: stateId },
+        //             type: 'GET',
+        //             success: function (data) {
+        //                 $('#cities').append(data);
+        //             }
+        //         });
+        //     });
+        // });
+
+
+
+
+
+    </script>
+}

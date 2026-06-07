@@ -1,0 +1,176 @@
+﻿@model IEnumerable<RedCloud.Domain.Entities.GetAllAssignNumber>
+@* @using Microsoft.AspNetCore.Mvc.Rendering *@
+
+@{
+    ViewData["Title"] = "All Assign Numbers to Users";
+    Layout = "_Layout";
+}
+<style>
+    .rateTable {
+        width: 100% !important;
+    }
+
+    a {
+        text-decoration: none !important;
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #007bff;
+        color: white;
+    }
+
+    th.no-sort {
+        pointer-events: none;
+    }
+
+        th.no-sort .sorting, th.no-sort .sorting_asc, th.no-sort .sorting_desc {
+            display: none !important;
+        }
+
+    .card-title {
+        margin: 0;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .dt-search {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+    .modal-header {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .modal-footer .btn-danger {
+        background-color: #dc3545;
+        border: none;
+    }
+
+    .container {
+        max-width: 100%;
+    }
+</style>
+
+
+
+<form method="post" id="user-query-form" action="/OrganizationAdmin/AddOrganizationAdmin" novalidate="novalidate">
+    <div class="card-body">
+        <div class="container mt-4">
+            <div class="card shadow-lg">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <strong>
+                            <i class="fa-solid fa-phone"></i> Manage Number
+                        </strong>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        
+                    </div>
+                    <table id="rateTable" class="table table-bordered table-striped" style="width:100% !important;">
+                        <thead>
+                            <tr>
+                                
+                                <th> Allocated Date</th>
+                                <th> Number</th>
+                                <th> Assigned Type</th>
+                                <th>Assigned User</th>
+                                <th class="no-sort">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var numberDetails in Model)
+                            {
+                                <tr>
+                                    <td>@numberDetails.AllocatedDate </td>
+                                    <td>@numberDetails.Number </td>
+                                    <td>@numberDetails.AssignedType </td>
+                                    <td>@numberDetails.AssignedUser </td>
+                                    <td>
+                                        <a href="@Url.Action("GetAssignNumberById", "AssignNumberToUser", new { id = numberDetails.NumberId })" class="text-primary">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </a>
+                                        <a href="@Url.Action("AssignNumber", "AssignNumberToUser", new { id = numberDetails.NumberId  })" class="text-warning ml-3">
+                                            <i class="fa fa-share-alt" aria-hidden="true"></i>
+                                        </a>
+                                        
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#rateTable').DataTable({
+                searching: true,
+                paging: true, columnDefs: [
+                    { targets: 'no-sort', orderable: false }
+                ],
+            });
+
+            var deleteUrl = "";
+            var deleteRow;
+
+            $('.delete-btn').on('click', function () {
+                var rateId = $(this).data('id');
+                deleteUrl = '@Url.Action("DeleteRate", "Rate")' + '?id=' + rateId;
+                deleteRow = $(this).closest('tr');
+            });
+
+            $('#confirmDelete').on('click', function () {
+                $.ajax({
+                    url: deleteUrl,
+                    type: 'POST',
+                    success: function (result) {
+
+                        $('#deleteModal').modal('hide'); // Hide the modal
+                        deleteRow.remove(); // Remove the row from the table
+                        toastr.success('Rate deleted successfully'); // Show Toastr message
+                    },
+                    error: function () {
+                        toastr.error('Error deleting rate');
+                    }
+                });
+            });
+
+            // // Ensure modal closes correctly
+            // $('#deleteModal').on('hidden.bs.modal', function () {
+            //     deleteUrl = "";
+            //     deleteRow = null;
+            // });
+        });
+    </script>
+}

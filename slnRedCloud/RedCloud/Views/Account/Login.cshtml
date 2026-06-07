@@ -1,0 +1,190 @@
+﻿@model RedCloud.Application.Features.Account.Queries.LoginQuery.LoginVM
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_LoginLayout";
+}
+
+<style>
+    .auth-one-bg-position {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 380px;
+    }
+
+    .auth-one-bg {
+        background-position: center;
+        background-size: cover;
+        background-image: radial-gradient(rgba(0, 0, 0, 0) 0%, rgb(25 75 255 / 17%) 100%), radial-gradient(rgba(0, 0, 0, 0) 33%, rgb(9 87 255 / 47%) 166%);
+    }
+
+    #video-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+
+        #video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .auth-one-bg .bg-overlay {
+        background: linear-gradient(to right, rgb(99 41 255 / 6%), rgb(120 247 40 / 18%));
+        opacity: 0.9;
+    }
+
+    .bg-overlay {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        top: 0;
+        opacity: 0.7;
+        background-color: #000;
+    }
+
+    .auth-one-bg .shape {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+        .auth-one-bg .shape > svg {
+            width: 100%;
+            height: auto;
+            fill: #ecf0fa;
+        }
+
+    .particles-js-canvas-el {
+        position: relative;
+    }
+
+    .auth-page-wrapper .auth-page-content {
+        padding-bottom: 60px;
+        position: relative;
+        z-index: 2;
+        width: 100%;
+    }
+
+    .login-bg {
+        background-color: rgb(255 255 255 / 50%);
+        backdrop-filter: saturate(180%) blur(1px);
+        border: 2px solid rgb(0 246 253 / 0%);
+        box-shadow: rgb(0 0 0 / 10%) 0px 10px 15px -3px, rgb(0 0 0 / 5%) 0px 4px 6px -2px;
+    }
+
+    .card-body {
+        box-shadow: rgb(0 0 0 / 45%) 0px 25px 20px -20px;
+    }
+
+    .form-label {
+        font-size: 17px;
+        font-family: calibri;
+    }
+
+    body {
+        background: #ecf0fa !important;
+    }
+</style>
+
+<div class="auth-page-wrapper pt-5">
+    <!-- page bg -->
+    <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
+        <div id="video-container">
+        </div>
+
+        <div class="bg-overlay"></div>
+        <div class="shape">
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 120">
+                <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
+            </svg>
+        </div>
+        <canvas class="particles-js-canvas-el" width="1349" height="380" style="width: 100%; height: 100%;"></canvas>
+    </div>
+
+    <!-- page content -->
+    <div class="auth-page-content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-5">
+                    <div class="card mt-5 login-bg">
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <div class="d-inline-block auth-logo">
+                                    <img src="https://redcloud.co.in/wp-content/uploads/2023/09/redcloud-technologies-logo.png" alt="JSLPS image" height="80" />
+                                </div>
+                                <h3 class="text-dark mt-3">Login to Your Account</h3>
+                            </div>
+
+                            <div class="p-2 mt-3">
+                                <form asp-action="Login" method="post">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="mb-3">
+                                        <label asp-for="Email" class="form-label">Username</label>
+                                        <input asp-for="Email" class="form-control" placeholder="Enter username" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label asp-for="Password" class="form-label">Password</label>
+                                        <div class="position-relative auth-pass-inputgroup mb-3">
+                                            <input asp-for="Password" type="password" class="form-control pe-5 password-input" placeholder="Enter password" id="password" />
+                                            <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="togglePassword"><i class="fas fa-eye align-middle" id="toggleIcon"></i></button>
+                                        </div>
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <a asp-action="ForgetPassword" asp-controller="Account" class="text-muted float-end">Forgot password?</a>
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <input type="submit" value="Login" class="btn btn-primary w-100" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- card body -->
+                    </div>
+                    <!-- card -->
+                </div>
+            </div>
+            <!-- row -->
+        </div>
+        <!-- container -->
+    </div>
+    <!-- end page content -->
+</div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            var passwordInput = document.getElementById('password');
+            var toggleIcon = document.getElementById('toggleIcon');
+            var type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            toggleIcon.classList.toggle('fa-eye');
+            toggleIcon.classList.toggle('fa-eye-slash');
+        });
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

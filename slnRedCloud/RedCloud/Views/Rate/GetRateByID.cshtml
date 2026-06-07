@@ -1,0 +1,296 @@
+﻿
+
+
+@model RedCloud.Application.Features.Rates.Queries.RateDetailVM
+
+@{
+    ViewBag.Title = "Rate Details";
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .custom-card {
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 1cm;
+    }
+
+    .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #007bff;
+        color: white;
+        padding: 15px;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .logo-text {
+        display: flex;
+        align-items: center;
+    }
+
+        .logo-text img {
+            margin-right: 10px;
+            filter: invert(100%);
+        }
+
+        .logo-text p {
+            font-size: 24px;
+            color: white;
+            margin: 0;
+        }
+
+    .form-control-plaintext {
+        background-color: #f8f9fa;
+        border: none;
+        padding-left: 0;
+        color: #333333;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+    .text-center {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container-fluid mt-1">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="custom-card">
+                <div class="header-section">
+                    <div class="logo-text">
+                        <img src="https://files.axshare.com/gsc/5886BD/e2/ee/cb/e2eecb648f19481093d6b12d28c3beb3/images/view_user_details/u27.svg?pageId=45d84280-2bba-453f-a23a-42e8aeab14be" alt="Rate Details Logo">
+                        <p><strong>Reseller Rate Detail</strong></p>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-6 form-group">
+                        <label for="ResellerName" class="rate-detail-label">@Html.DisplayNameFor(model => model.ResellerName):</label>
+                        <input type="text" id="ResellerName" class="form-control-plaintext" readonly value="@Model.ResellerName" />
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="MonthlyNumber" class="rate-detail-label">@Html.DisplayNameFor(model => model.MonthlyNumber):</label>
+                        <input type="text" id="MonthlyNumber" class="form-control-plaintext" readonly value="@Model.MonthlyNumber" />
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="Users" class="rate-detail-label">@Html.DisplayNameFor(model => model.Users):</label>
+                        <input type="text" id="Users" class="form-control-plaintext" readonly value="@Model.Users" />
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="InboundSMS" class="rate-detail-label">@Html.DisplayNameFor(model => model.InboundSMS):</label>
+                        <input type="text" id="InboundSMS" class="form-control-plaintext" readonly value="@Model.InboundSMS" />
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="OutboundSMS" class="rate-detail-label">@Html.DisplayNameFor(model => model.OutboundSMS):</label>
+                        <input type="text" id="OutboundSMS" class="form-control-plaintext" readonly value="@Model.OutboundSMS" />
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="InboundMMS" class="rate-detail-label">@Html.DisplayNameFor(model => model.InboundMMS):</label>
+                        <input type="text" id="InboundMMS" class="form-control-plaintext" readonly value="@Model.InboundMMS" />
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="OutboundMMS" class="rate-detail-label">@Html.DisplayNameFor(model => model.OutboundMMS):</label>
+                        <input type="text" id="OutboundMMS" class="form-control-plaintext" readonly value="@Model.OutboundMMS" />
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="Type" class="rate-detail-label">@Html.DisplayNameFor(model => model.Type):</label>
+                        <input type="text" id="Type" class="form-control-plaintext" readonly value="@Model.Type" />
+                    </div>
+                </div>
+                <div class="text-center">
+                    <a href="@Url.Action("ViewallRates", "Rate")" class="btn btn-primary">Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#confirmDelete').click(function () {
+                var rateId = '@Model.RateId';
+                $.ajax({
+                    url: '@Url.Action("DeleteRate", "Rate")',
+                    type: 'DELETE',
+                    data: { id: rateId },
+                    success: function (result) {
+                        window.location.href = '@Url.Action("ViewallRates", "Rate")';
+                    },
+                    error: function () {
+                        alert('An error occurred while trying to delete the rate.');
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+
+
+
+
+@* @model RedCloud.Application.Features.Rates.Queries.RateDetailVM
+
+@{
+    ViewBag.Title = "Rate Details";
+    var encryptedRateId = RedCloud.Application.Helper.EncryptionDecryption.EncryptString(Model.RateId.ToString());
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .custom-card {
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 1cm;
+    }
+
+    .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #007bff;
+        color: white;
+        padding: 15px;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .logo-text {
+        display: flex;
+        align-items: center;
+    }
+
+        .logo-text img {
+            margin-right: 10px;
+            filter: invert(100%);
+        }
+
+        .logo-text p {
+            font-size: 24px;
+            color: white;
+            margin: 0;
+        }
+
+    .form-control-plaintext {
+        background-color: #f8f9fa;
+        border: none;
+        padding-left: 0;
+        color: #333333;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+    .text-center {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="custom-card">
+                <div class="header-section">
+                    <div class="logo-text">
+                        <img src="https://files.axshare.com/gsc/5886BD/e2/ee/cb/e2eecb648f19481093d6b12d28c3beb3/images/view_user_details/u27.svg?pageId=45d84280-2bba-453f-a23a-42e8aeab14be" alt="Rate Details Logo">
+                        <p><strong>Reseller Rate Detail</strong></p>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-6 form-group">
+                        <label for="ResellerName" class="rate-detail-label">@Html.DisplayNameFor(model => model.ResellerName):</label>
+                        <input type="text" id="ResellerName" class="form-control-plaintext" readonly value="@Model.ResellerName" />
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="MonthlyNumber" class="rate-detail-label">@Html.DisplayNameFor(model => model.MonthlyNumber):</label>
+                        <input type="text" id="MonthlyNumber" class="form-control-plaintext" readonly value="@Model.MonthlyNumber" />
+                    </div>
+                    <!-- Add more fields as needed -->
+                </div>
+                <div class="text-center">
+                    <a href="@Url.Action("GetRateByID", "Rate", new { encryptedId = encryptedRateId })" class="btn btn-primary">View Rate</a>
+                    <button type="button" class="btn btn-secondary" onclick="deleteRate('@encryptedRateId')">Delete Rate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function deleteRate(encryptedId) {
+        if (confirm("Are you sure you want to delete this rate?")) {
+            fetch(`/Rate/DeleteRate/${encryptedId}`, {
+                method: 'DELETE'
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = "/Rate/ViewallRates";
+                } else {
+                    alert("Failed to delete rate.");
+                }
+            }).catch(error => {
+                console.error("Error deleting rate:", error);
+                alert("Error deleting rate.");
+            });
+        }
+    }
+</script>
+ *@

@@ -1,0 +1,96 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using RedCloud.Domain.Entities
+
+
+
+@model RedCloud.Application.Features.Numbers.Commands.AssignNumberViewModel
+
+
+<div class="modal-header">
+    <h5 class="modal-title">Update Status</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="error-message-container"></div>
+    <form id="updateLicenseForm" asp-action="UpdateProgress" asp-controller="Number" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <input asp-for="NumberId" class="form-control" hidden />
+        </div>
+        <div class="form-group">
+            <label asp-for="Status">ShortList:</label>
+            <select asp-for="Status" class="form-control">
+                <option value="">Select Value</option>
+                @foreach (var value in Enum.GetValues(typeof(Status)))
+                {
+                    <option value="@value" selected="@value.Equals(Model.Status)">
+                        @value
+                    </option>
+                }
+            </select>
+            <span asp-validation-for="Status" class="text-danger"></span>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" id="closeButton" data-dismiss="modal">Close</button>
+    <button type="button" class="btn btn-primary" id="licenseSaveButton" data-save="modal">Save</button>
+</div>
+
+<script>
+$(document).ready(function() {
+    // Show the modal when the link is clicked and load its content dynamically
+    $('#updateStatusLink').on('click', function(e) {
+        e.preventDefault();
+
+        $.get('@Url.Action("UpdateProgress", "Number")', function(data) {
+            $('#updateModal .modal-content').html(data);
+            $('#updateModal').modal('show');
+        });
+    });
+
+    // Handle form submission
+    $(document).on('click', '#licenseSaveButton', function() {
+        // Serialize the form data
+        var formData = $('#updateLicenseForm').serialize();
+
+        // Make an AJAX request to submit the form data
+        $.ajax({
+            type: 'POST',
+            url: $('#updateLicenseForm').attr('action'),
+            data: formData,
+            success: function(response) {
+                if (response.success) {
+                    // Close the modal
+                    $('#updateModal').modal('hide');
+
+                    // Optionally, refresh the page or update the UI to reflect the changes
+                    location.reload();
+                } else {
+                    // Display error messages
+                    $('.error-message-container').html('<div class="alert alert-danger">' + response.errorMessages + '</div>');
+                }
+            },
+            error: function(xhr, status, error) {
+                // Display generic error message
+                $('.error-message-container').html('<div class="alert alert-danger">An error occurred while updating the status. Please try again later.</div>');
+            }
+        });
+    });
+
+    // Handle modal close button
+    $(document).on('click', '#closeButton', function() {
+        $('#updateModal').modal('hide');
+    });
+
+    // Clear error messages when modal is hidden
+    $('#updateModal').on('hidden.bs.modal', function() {
+        $('.error-message-container').empty();
+    });
+});
+</script>

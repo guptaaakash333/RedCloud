@@ -1,0 +1,189 @@
+﻿@model RedCloud.Application.Features.Numbers.Queries.ViewAssignedNumberVM
+ @using RedCloud.Domain.Entities
+ @using RedCloud.Application.Features
+
+
+@{
+    ViewData["Title"] = "Update Number";
+
+}
+
+<style>
+    .admin-details {
+        margin-bottom: 30px;
+        margin-top: 20px; /* Add some space between sections */
+    }
+
+    .card-custom {
+        background-color: #f8f9fa; /* Light gray background */
+        border-radius: 10px;
+        margin-top: 20px;
+        margin-left: 120px;
+        width: 900px;
+    }
+
+    .card-header-custom {
+        background-color: #007BFF; /* Dark background for header */
+        color: #fff;
+        border-radius: 10px 10px 0 0;
+        padding: 10px 20px;
+    }
+
+        .card-header-custom .logo-text {
+            display: flex;
+            align-items: center;
+        }
+
+            .card-header-custom .logo-text img {
+                width: 50px;
+                margin-right: 10px;
+            }
+
+        .card-header-custom .buttons {
+            margin-left: auto;
+        }
+
+            .card-header-custom .buttons a {
+                color: #fff;
+                margin-left: 10px;
+            }
+
+</style>
+
+<div class="container mt-5" style="align-content:center">
+    <div class="card card-custom">
+        <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
+            <div class="logo-text">
+                <img src="https://files.axshare.com/gsc/5886BD/e2/ee/cb/e2eecb648f19481093d6b12d28c3beb3/images/view_user_details/u27.svg?pageId=45d84280-2bba-453f-a23a-42e8aeab14be" alt="Organization Admin Logo">
+                
+            </div>
+            <div class="buttons">
+                <a href="@Url.Action("UpdateAssignedNumber", new { id = Model.NumberId })" class="btn btn-outline-light">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                <a href="@Url.Action("Viewallnumberslist", "Number")" class="btn btn-outline-light">
+                    <i class="fa-solid fa-circle-left"></i>
+                </a>
+                <div>
+                    <a href="#" id="updateStatusLink">Status:In Progress</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row" style="margin-left:20px">
+
+
+                <div class="col-md-6">
+                    @Html.HiddenFor(x => x.NumberId)
+                    <p><strong> PhoneNumber:</strong> @Html.DisplayFor(model => model.PhoneNumber)</p>
+                    <p><strong>RateCenter:</strong> @Html.DisplayFor(model => model.RateCenter)</p>
+                    <p><strong>Type:</strong> @Html.DisplayFor(model => model.TypeName)</p>
+                    <p><strong>Carrier:</strong> @Html.DisplayFor(model => model.CarrierName)</p>
+
+                </div>
+                <div class="col-md-6">
+                    <p><strong>State:</strong> @Html.DisplayFor(model => model.StateName)</p>
+                    <p><strong>LATA:</strong> @Html.DisplayFor(model => model.LATA)</p>
+                    <p><strong>Country:</strong> @Html.DisplayFor(model => model.CountryName)</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Structure -->
+<div id="updateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="error-message-container"></div>
+                <form id="updateLicenseForm" asp-action="UpdateProgress" asp-controller="Number" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <input asp-for="NumberId" class="form-control" hidden />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Status">ShortList:</label>
+                        <select asp-for="Status" class="form-control">
+                            <option value="">Select Value</option>
+                            @foreach (var value in Enum.GetValues(typeof(Status)))
+                            {
+                                <option value="@value" selected="@value.Equals(Model.Status)">
+                                    @value
+                                </option>
+                            }
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="closeButton" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="licenseSaveButton" data-save="modal">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Include jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+    // Show the modal when the link is clicked
+    $('#updateStatusLink').on('click', function(e) {
+        // e.preventDefault();
+        debugger
+        $('#updateModal').modal('show');
+    });
+
+    // Handle form submission
+    $('#licenseSaveButton').on('click', function() {
+        // Serialize the form data
+        var formData = $('#updateLicenseForm').serialize();
+
+        // Make an AJAX request to submit the form data
+        $.ajax({
+            type: 'POST',
+                url: $('#updateLicenseForm').attr('action'),
+            data: formData,
+            function(response) {
+                if (response.success) {
+                    // Close the modal
+                    $('#updateModal').modal('hide');
+
+                    // Optionally, refresh the page or update the UI to reflect the changes
+                    location.reload();
+                } else {
+                    // Display error messages
+                   $('.error-message-container').html(response.errorMessages);
+                        $('#updateModal').modal('hide');
+                }
+            },
+            error: function(xhr, status, error) {
+                // Display generic error message
+               $('.error-message-container').html('<div class="alert alert-success">Updated Successfully</div>');
+            }
+        });
+    });
+
+    // Handle modal close button
+    $('#closeButton').on('click', function() {
+        $('#updateModal').modal('hide');
+    });
+
+    // Clear error messages when modal is hidden
+    $('#updateModal').on('hidden.bs.modal', function() {
+        $('.error-message-container').empty();
+    });
+
+</script>

@@ -1,0 +1,118 @@
+﻿@model RedCloud.ViewModel.OrganizationUserVM;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Organization Admin</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card-primary {
+            border-top: 3px solid #007bff;
+            min-height: 400px;
+            width : 600px;/* Increased card height */
+        }
+
+        .card-title {
+            font-size: 1.25rem; /* Reduced heading size */
+        }
+
+        .form-control {
+            margin-bottom: 15px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+        .btn-back {
+            background-color: grey;
+        }
+
+        .card-header, .card-body {
+            padding: 1rem;
+        }
+
+        .card-body {
+            padding-top: 1rem;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-group span {
+            margin-top: 5px;
+        }
+
+        .card-title{
+            height:10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card card-primary">
+                    <div class="card-header text-center">
+                        <h3 class="card-title">Update Organization Admin</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form asp-action="UpdateOrganizationUser" method="post">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input type="hidden" asp-for="OrganizationAdminId" />
+                                    <input type="hidden" asp-for="OrganizationUserId" />
+                                    <input type="hidden" asp-for="IsActive" />
+
+                                    <div class="form-group">
+                                        <label for="OrganizationUserFirstName">First Name</label>
+                                        <input asp-for="OrganizationUserFirstName" class="form-control" id="OrganizationUserFirstName" placeholder="Enter First Name">
+                                        <span asp-validation-for="OrganizationUserFirstName" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="OrganizationUserLastName">Last Name</label>
+                                        <input asp-for="OrganizationUserLastName" class="form-control" placeholder="Enter Last Name" />
+                                        <span asp-validation-for="OrganizationUserLastName" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="OrganizationUserEmail">Email</label>
+                                        <input asp-for="OrganizationUserEmail" class="form-control" id="OrganizationUserEmail" placeholder="Enter Email">
+                                        <span asp-validation-for="OrganizationUserEmail" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-right">
+                            @* <a class="btn btn-primary btn-back mr-3" asp-action="ViewOrganizationUsers" asp-controller="OrganizationUser" new { id=Model.OrganizationAdminId }>Back</a> *@
+                            <a href="@Url.Action("ViewOrganizationUsers", "OrganizationUser", new { id = Model.OrganizationAdminId })" class="btn btn-secondary float-right" style="margin-left:5px">Back</a>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+@section Scripts {
+    <partial name="_ValIdationScriptsPartial" />
+}

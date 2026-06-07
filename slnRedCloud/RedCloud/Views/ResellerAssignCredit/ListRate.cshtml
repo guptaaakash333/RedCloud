@@ -1,0 +1,335 @@
+﻿
+@* <h1>Show list rate</h1> *@
+
+@model IEnumerable<RedCloud.Domain.Entities.GetAllAssignCredit>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    a{
+        text-decoration: none;
+    }
+
+    td,tr {
+        text-align: center;
+    }
+
+    .dataTables_wrapper .top {
+        margin-top: 0;
+    }
+
+    #dataTable {
+        width: 100% !important;
+    }
+
+    .dt-search {
+        float: right;
+        margin-bottom: 2px;
+    }
+
+    .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        background-color: transparent;
+    }
+
+        .table th,
+        .table td {
+            padding: 1rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .table tbody + tbody {
+            border-top: 2px solid #dee2e6;
+        }
+
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #dee2e6;
+        }
+
+        .table-bordered thead th,
+        .table-bordered thead td {
+            border-bottom-width: 2px;
+        }
+
+    .status-active {
+        color: white;
+        background-color: green;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.25rem;
+    }
+
+    .status-inactive {
+        color: white;
+        background-color: red;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.25rem;
+    }
+
+    .btn-action {
+        margin-right: 0.5rem;
+    }
+
+    / Custom CSS for DataTables Buttons /
+    .dt-button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 0.25rem;
+        padding: 0.5rem 1rem;
+        margin: 0.2rem;
+        font-size: 0.875rem;
+        cursor: pointer;
+    }
+
+    .dt-button:hover {
+        background-color: #0056b3;
+    }
+
+    / Custom CSS for DataTables Pagination /
+    .dataTables_paginate .paginate_button {
+        background-color: #007bff;
+        color: white !important;
+        border: none;
+        border-radius: 0.25rem;
+        padding: 0.5rem 1rem;
+        margin: 0.2rem;
+        font-size: 0.875rem;
+        cursor: pointer;
+    }
+
+    .dataTables_paginate .paginate_button:hover {
+        background-color: #0056b3;
+    }
+
+    .dataTables_paginate .paginate_button.current {
+        background-color: #0056b3;
+        color: white !important;
+    }
+
+    / Custom CSS for Entries Dropdown /
+    .dataTables_length select {
+        border: 1px solid #007bff;
+        border-radius: 0.25rem;
+        padding: 0.25rem;
+        margin: 0.2rem;
+    }
+</style>
+
+<form method="post" id="user-query-form" action="/OrganizationAdmin/AddOrganizationAdmin" novalidate="novalidate">
+    <div class="card-body">
+
+        <div class="card">
+            <div class="card-header" style="background-color:#007BFF">
+                <h3 class="card-title" style="color:white; font-weight:bold;font-size:23px;"> <i class="fa-solid fa-dollar-sign"></i>  Assign Credit</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p>
+                                <a class="btn btn-primary" asp-action="AddRate" asp-controller="ResellerAssignCredit"
+                                   style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; float:right; margin-bottom:10px">
+                                    Add Rate
+                                </a>
+                            </p>
+                            @* <label for="entriesPerPage">
+                                Show Entries
+                                <select id="entriesPerPage" class="custom-select custom-select-sm form-control form-control-sm">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </label> *@
+                            <table id="dataTable" class="table table-bordered table-striped dataTable dtr-inline" aria-describedby="dataTable_info">
+                                <thead>
+                                    <tr>
+                                        <th>Organization </th>
+                                        <th>Purchased credits</th>
+                                        <th>Type</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in @ViewBag.listRate)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.GetAllAssignCreditName
+                                            </td>
+                                            <td>
+                                                1000 @* @item.RateAssignCreditId *@
+                                            </td>
+                                            <td>
+                                                @item.GetAllAssignCreditTypeName
+                                            </td>
+                                           
+                                             <td>
+                                                <a asp-action="AssignCreditDetailsById" asp-controller="ResellerAssignCredit" asp-route-id="@item.RateAssignCreditId" class="btn-action">
+                                                    <i class="fa-solid fa-eye" style="color: #050505;"></i>
+                                                </a>
+
+                                                <a asp-action="EditRate" asp-controller="ResellerAssignCredit" asp-route-id=" @item.RateAssignCreditId" class="btn-action">
+                                                    <i class="fa-regular fa-pen-to-square" style="color: #131111;"></i>
+                                                </a>
+                                                <a asp-action="GetRatedUsageById" asp-controller="ResellerAssignCredit" asp-route-id="@item.RateAssignCreditId" class="delete-btn btn-action" data-id="@item.RateAssignCreditId">
+                                                    <i class="fa-solid fa-circle-notch" style="color: #FF8C00;"></i>
+                                                </a>
+
+                                                @* <a class="delete-btn btn-action" data-id="@item.RateAssignCreditId" data-name="@item.GetAllAssignCreditName" >
+                                                    <i class="fa-solid fa-trash" style="color: #cb1010;"></i>
+                                                </a> *@
+
+                                                <a class="delete-btn btn-action" data-id=" @item.RateAssignCreditId" data-name="@item.RateAssignCreditId">
+                                                    <i class="fa-solid fa-dollar-sign"></i>
+                                                </a>
+                                            </td> 
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+
+    </div>
+
+</form>
+
+@section Scripts {
+    <!-- Include necessary libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <!-- DataTables CSS and JS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTable
+            var table = $('#dataTable').DataTable({
+                paging: true,
+                searching: true,
+                // dom: 'Bfrtip',
+                // buttons: [
+                //     {
+                //         extend: 'csvHtml5',
+                //         text: 'Export CSV',
+                //         className: 'dt-button'
+                //     },
+                //     {
+                //         extend: 'excelHtml5',
+                //         text: 'Export Excel',
+                //         className: 'dt-button'
+                //     }
+                // ]
+            });
+
+            // Change entries per page
+            $('#entriesPerPage').change(function () {
+                var length = $(this).val();
+                table.page.len(length).draw();
+            });
+
+            // Set up Toastr options
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": "1200",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            // // Event listeners for delete functionality
+            // $('.delete-btn').on('click', function (e) {
+            //     e.preventDefault();
+            //     var id = $(this).data('id');
+            //     var name = $(this).data('name');
+            //     $('#deleteItemName').text(name);
+            //     $('#confirmDeleteBtn').attr('data-id', id);
+            //     $('#deleteConfirmationModal').modal('show');
+            // });
+
+            // $('#cancelBtn').on('click', function (e) {
+            //     $('#deleteConfirmationModal').modal('hide');
+            // });
+
+            // $('#cancelBtn2').on('click', function (e) {
+            //     $('#deleteConfirmationModal').modal('hide');
+            // });
+
+            // $('#confirmDeleteBtn').on('click', function () {
+            //     var id = $(this).attr('data-id');
+            //     $('#deleteConfirmationModal').modal('hide');
+
+
+            // Call delete method using AJAX
+            $.ajax({
+                url: '/ResellerAssignCredit/SoftDelete/' + id,
+                type: 'GET',
+                success: function (data) {
+                    // Handle success
+                    toastr.success('Successfully deleted the item.', 'Success');
+                    // Optionally, you can reload the page or update the table
+
+                    // setTimeout(function () {
+                    //     window.location.href = '@Url.Action("ListRAte", "ResellerAssignCredit")';
+                    // }, 1000);
+
+                    // setTimeout(function () {
+                    //     location.reload();
+                    // }, 1000);
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors
+                    toastr.error('Error: ' + xhr.responseText, 'Deletion Failed');
+                }
+            });
+
+        });
+    </script>
+}
+

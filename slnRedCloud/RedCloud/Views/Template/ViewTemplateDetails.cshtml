@@ -1,0 +1,169 @@
+﻿@model RedCloud.ViewModel.TemplateVM
+
+@{
+    Layout = "_Layout";
+}
+
+<style>
+    .admin-details {
+        margin-bottom: 30px;
+        margin-top: 20px; /* Add some space between sections */
+    }
+
+    .card-custom {
+        background-color: #f8f9fa; /* Light gray background */
+        border-radius: 10px;
+        margin-top: 20px;
+        margin-left: 120px;
+        width: 900px;
+    }
+
+    .card-header-custom {
+        background-color: #007BFF; /* Dark background for header */
+        color: #fff;
+        border-radius: 10px 10px 0 0;
+        padding: 10px 20px;
+    }
+
+        .card-header-custom .logo-text {
+            display: flex;
+            align-items: center;
+        }
+
+            .card-header-custom .logo-text img {
+                width: 50px;
+                margin-right: 10px;
+            }
+
+        .card-header-custom .buttons {
+            margin-left: auto;
+        }
+
+            .card-header-custom .buttons a {
+                color: #fff;
+                margin-left: 10px;
+            }
+</style>
+
+<div class="container mt-5" style="align-content:center">
+    <div class="card card-custom">
+        <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
+            <div class="logo-text">
+                <img src="https://files.axshare.com/gsc/5886BD/e2/ee/cb/e2eecb648f19481093d6b12d28c3beb3/images/view_user_details/u27.svg?pageId=45d84280-2bba-453f-a23a-42e8aeab14be" alt="Organization Admin Logo">
+                <strong> Template Details</strong>
+            </div>
+            <div class="buttons">
+               
+                <a href="@Url.Action("UpdateTemplate", new { id = Model.TemplateId })" class="btn btn-outline-light">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                <a class="delete-btn btn-action" data-id="@Model.TemplateId" data-name="@Model.TemplateName" href="#">
+                    <i class="fa-solid fa-trash" style="color: #cb1010;"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row" style="margin-left:20px">
+                <div class="col-md-6">
+                    @Html.HiddenFor(x => x.TemplateId)
+                    <div class="admin-details">
+                        <p><strong>Template Name:</strong> @Html.DisplayFor(model => model.TemplateName)</p>
+                        <p><strong>Message Type:</strong> @Html.DisplayFor(model => model.MessageType)</p>
+                        <p><strong>Message Body:</strong> @Html.DisplayFor(model => model.MessageBody)</p>
+                        <p><strong>Template URL:</strong> @Html.DisplayFor(model => model.TemplateURL)</p>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="text-center mt-4">
+                @*     <a asp-action="UpdateTemplate" asp-controller="Template" asp-route-id="@Model.TemplateId" class="btn-action">
+                <i class="fa-regular fa-pen-to-square" style="color: #131111;"></i>
+                </a>
+
+                <a class="delete-btn btn-action" data-id="@Model.TemplateId" data-name="@Model.TemplateName" href="#">
+                <i class="fa-solid fa-trash" style="color: #cb1010;"></i>
+                </a> *@
+                <a href="@Url.Action("ViewTemplates", "Template")" class="btn btn-primary">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" id="cancelBtn2" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <span id="deleteItemName"></span>?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            console.log('Document is ready');
+
+
+
+            $('.delete-btn').on('click', function (e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+                var name = $(this).data('name');
+                console.log('Delete button clicked, id:', id, 'name:', name);
+                $('#deleteItemName').text(name);
+                $('#confirmDeleteBtn').attr('data-id', id);
+                $('#deleteConfirmationModal').modal('show');
+            });
+
+            $('#cancelBtn').on('click', function (e) {
+                $('#deleteConfirmationModal').modal('hide');
+            });
+
+            $('#cancelBtn2').on('click', function (e) {
+                $('#deleteConfirmationModal').modal('hide');
+            });
+
+            $('#confirmDeleteBtn').on('click', function () {
+                var id = $(this).attr('data-id');
+                console.log('Confirm delete button clicked, id:', id);
+                $('#deleteConfirmationModal').modal('hide');
+
+            
+
+                // Call delete method using AJAX
+                $.ajax({
+                    url: '/Template/SoftDeleteTemplate/' + id,
+                    type: 'GET',
+                    success: function (data) {
+                        // Handle success
+                        console.log('Delete successful');
+                        //toastr.success('Successfully deleted the item.', 'Success');
+                        // Optionally, you can reload the page or update the table
+                        console.log('Redirecting to template list page...');
+                        window.location.href = '@Url.Action("ViewTemplates", "Template")';
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle errors
+                        console.log('Delete failed', xhr, status, error);
+                        toastr.error('Error: ' + xhr.responseText, 'Deletion Failed');
+                    }
+                });
+            });
+        });
+    </script>
+}
+

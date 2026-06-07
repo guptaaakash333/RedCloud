@@ -1,0 +1,64 @@
+﻿@* @model IEnumerable<RedCloud.ViewModel.FullOrgReportVM>
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<style>
+    .dashboard {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+    }
+
+    .card {
+        width: calc(33.33% - 20px);
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #007bff;
+        color: white;
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+    .card-title {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+
+    .card-value {
+        font-size: 2em;
+        font-weight: bold;
+    }
+
+    .container {
+        max-width: 100%;
+    }
+</style>
+
+
+<div class="container mt-4">
+    <div class="dashboard">
+        <div class="card">
+            <div class="card-title">All Inbound Messages</div>
+            <div class="card-value">XX,XXX</div>
+        </div>
+        <div class="card">
+            <div class="card-title">All Outbound Messages</div>
+            <div class="card-value">XX,XXX</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Organization Report</div>
+            <div class="card-value">XX,XXX</div>
+        </div>
+    </div>
+</div>
+ *@

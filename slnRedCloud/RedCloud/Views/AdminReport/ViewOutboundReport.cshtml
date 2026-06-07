@@ -1,0 +1,143 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+@model IEnumerable<RedCloud.Domain.Entities.AdminInboundMessageReport>
+
+@{
+    ViewData["Title"] = "Outbound Report";
+}
+
+<style>
+    .rateTable {
+        width: 100% !important;
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #007bff;
+        color: white;
+    }
+
+    .card-title {
+        margin: 0;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .dt-search {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .container {
+        max-width: 100%;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header">
+            <h3 class="card-title"><strong>Outbound Report</strong></h3>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="fromDate" class="form-label">From Date:</label>
+                    <input type="date" class="form-control" id="fromDate">
+                </div>
+                <div class="col-md-6">
+                    <label for="toDate" class="form-label">To Date:</label>
+                    <input type="date" class="form-control" id="toDate">
+                </div>
+            </div>
+
+            <table id="reportTable" class="table table-bordered table-striped rateTable">
+                <thead>
+                    <tr>
+                        <th>Organization Name</th>
+                        <th>Reseller Name</th>
+                        <th>Admin Mobile No</th>
+                        <th>Created Date</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var report in Model)
+                    {
+                        <tr>
+                            <td>@report.OrgName</td>
+                            <td>@report.ResellerName</td>
+                            <td>@report.OrgAdminMobNo</td>
+                            <td>@report.CreatedDateTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                            <td>@report.Type</td>
+                            <td>@report.Status</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <a asp-controller="AdminReportDashboard" asp-action="Index" class="btn btn-secondary btn-sm">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- Include moment.js for date parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var table = $('#reportTable').DataTable({
+                searching: true,
+                paging: true
+            });
+
+            // Date range filtering
+            $('#fromDate, #toDate').on('change', function () {
+                var fromDate = $('#fromDate').val();
+                var toDate = $('#toDate').val();
+
+                table.draw();
+            });
+
+            // Custom filtering function which will filter data between two dates
+            $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var min = $('#fromDate').val();
+                    var max = $('#toDate').val();
+                    var date = data[2]; // Assuming Created Date is at index 2
+
+                    if ((min === '' || max === '') ||
+                        (moment(date, 'YYYY-MM-DD').isSameOrAfter(min) && moment(date, 'YYYY-MM-DD').isSameOrBefore(max))) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+
+            // Apply the custom search on table draw
+            table.on('draw', function () {
+                table.search('').columns().search('').draw();
+            });
+        });
+    </script>
+}

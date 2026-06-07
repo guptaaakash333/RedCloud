@@ -1,0 +1,198 @@
+﻿@model RedCloud.ViewModel.NumberVM;
+@using RedCloud.ViewModel;
+
+@{
+    IEnumerable<CountryVM> countries = (IEnumerable<CountryVM>)ViewBag.Country;
+    IEnumerable<SelectListItem> countrySelectList = countries.Select(c => new SelectListItem
+            {
+                Value = c.CountryId.ToString(),
+                Text = c.Name,
+            });
+    List<SelectListItem> stateList = new List<SelectListItem>();
+    //List<SelectListItem> cityList = new List<SelectListItem>();
+}
+
+
+
+
+
+<body>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Add Number</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form asp-action="AddNumber" method="post" id="user-query-form">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="OrgName"> Mobile </label>
+                                        <input asp-for="PhoneNumber" class="form-control" id="OrgName" placeholder=" Mobile Number ">
+                                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="OrgAdminName"> RateCenter</label>
+                                        <input asp-for="RateCenter" class="form-control" id="OrgAdminName" placeholder="Rate Center">
+                                        <span asp-validation-for="RateCenter" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="EIN">LATA </label>
+                                        <input asp-for="LATA" class="form-control" id="EIN" placeholder=" LATA ">
+                                        <span asp-validation-for="LATA" class="text-danger"></span>
+                                    </div>
+
+                                   
+
+                                   
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        @Html.Partial("_CountryDropDown", countrySelectList)
+                                        <span asp-validation-for="CountryId" class="text-danger"></span>
+
+                                    </div>
+                                    <div id="states" class="form-group">
+
+
+                                        @Html.Partial("_StateDropDown", stateList)
+                                        <span asp-validation-for="StateId" class="text-danger"></span>
+                                            <input type="hidden" id="CountryId" name="CountryId" />
+                                            <input type="hidden" id="StateId" name="StateId" />
+
+                                    </div>
+
+
+
+                                    @* <div id="cities" class="form-group">
+
+
+                                        @Html.Partial("_CityDropDown", cityList)
+                                        <span asp-validation-for="CityId" class="text-danger"></span>
+
+
+                                        <input type="hidden" id="CountryId" name="CountryId" />
+                                        <input type="hidden" id="StateId" name="StateId" />
+                                        <input type="hidden" id="CityId" name="CityId" />
+
+                                    </div>
+ *@
+
+                                   
+
+                                  
+
+                                    <div class="form-group">
+
+                                        <label for="TypeName"> TypeName</label>
+                                        @*   @ <select asp-items="@(new SelectList(ViewBag.ResellerList))"></select> @ *@
+                                            <select asp-for="TypesId" class="form-control" asp-items="@ViewBag.Typelist" required>
+                                            <option value="">Select Type</option>
+                                        </select>
+                                            <span asp-validation-for="TypesId" class="text-danger"></span>
+
+                                        @*   @ <input asp-for="ResellerName" class="form-control" id="ResellerName" placeholder="Enter reseller name"> @ *@
+                                    </div>
+
+
+                                        <div class="form-group">
+
+                                            <label for="CarrierName"> CarrierName</label>
+                                            @*   @ <select asp-items="@(new SelectList(ViewBag.ResellerList))"></select> @ *@
+                                            <select asp-for="CarrierId" class="form-control" asp-items="@ViewBag.AdminList" required>
+                                                <option value="">Select Carrier</option>
+                                            </select>
+                                            <span asp-validation-for="CarrierId" class="text-danger"></span>
+
+                                            @*   @ <input asp-for="ResellerName" class="form-control" id="ResellerName" placeholder="Enter reseller name"> @ *@
+                                        </div>
+
+
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary ml-3">Create</button>
+                    </form>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+
+
+        <!-- Bootstrap JS -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+
+    <script>
+
+        $(document).ready(function () {
+
+            $('#countryDropDown').change(function () {
+                var countryId = $('#countryDropDown').val();
+
+
+                $.ajax({
+                    url: '@Url.Action("GetStateByCountryId", "Dropdown")',
+                    data: { countryId: countryId },
+                    type: 'GET',
+                    success: function (data) {
+                        $('#states').empty();
+                        $('#cityDropdown').empty();
+                        $('#cityDropdown').append("<option>Select a city</option>");
+
+                        $('#states').append(data);
+
+
+                    }
+                });
+            });
+
+
+
+        });
+
+        // function getallCitys() {
+
+        //     var stateId = $('#stateDropDown').val();
+
+
+        //     $.ajax({
+
+        //         url: '@Url.Action("GetCityByStateId", "Dropdown")',
+        //         data: { stateId: stateId },
+        //         type: 'GET',
+        //         success: function (data) {
+        //             $('#cities').empty();
+        //             $('#cities').append(data);
+
+        //         }
+        //     });
+        // }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+    </script>
+
+
+}

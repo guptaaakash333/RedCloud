@@ -1,0 +1,512 @@
+﻿  @model RedCloud.Application.Features.ResellerAdminuser.Queries.ResellerAdminUserVM
+  @using RedCloud.ViewModel;
+
+@{
+    IEnumerable<CountryVM> countries = (IEnumerable<CountryVM>)ViewBag.Country;
+    IEnumerable<SelectListItem> countrySelectList = countries.Select(c => new SelectListItem
+            {
+                Value = c.CountryId.ToString(),
+                Text = c.Name,
+            });
+    List<SelectListItem> stateList = new List<SelectListItem>();
+    List<SelectListItem> cityList = new List<SelectListItem>();
+}
+
+
+
+
+
+@*
+<style>
+    .container {
+        wIdth: 400px; /* Set the wIdth of the container */
+        margin: 0 auto; /* Center the container horizontally */
+
+    }
+    /* Adjust checkbox size and position */
+    .form-check-input {
+        wIdth: 20px; /* Set the wIdth of the checkbox */
+        height: 20px; /* Set the height of the checkbox */
+        margin-top: 7px; /* Adjust vertical alignment */
+    }
+
+    /* Adjust label position */
+    .form-check-label {
+        margin-left: 5px; /* Add space between checkbox and label */
+        vertical-align: top; /* Align label with checkbox */
+    }
+    form{
+        border: 2px solId black;
+        padding:10px;
+    }
+</style> *@
+@* <div class="container">
+
+<h2>Create Reseller</h2> *@
+
+
+
+
+@*
+    <form asp-action="AddReseller" method="post">
+    <div class="form-group">
+        <label asp-for="ResellerName"></label>
+        <input asp-for="ResellerName" class="form-control" />
+        <span asp-valIdation-for="ResellerName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EIN"></label>
+        <input asp-for="EIN" class="form-control" />
+        <span asp-valIdation-for="EIN" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="AddressLine1"></label>
+        <input asp-for="AddressLine1" class="form-control" />
+        <span asp-valIdation-for="AddressLine1" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="AddressLine2"></label>
+        <input asp-for="AddressLine2" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="City"></label>
+        <input asp-for="City" class="form-control" />
+        <span asp-valIdation-for="City" class="text-danger"></span>
+    </div> *@
+
+@* <div class="form-group">
+        <label asp-for="State"></label>
+        <input asp-for="State" class="form-control" />
+        <span asp-valIdation-for="State" class="text-danger"></span>
+    </div> *@
+
+@*    <div class="form-group">
+            <label asp-for="Passaword"></label>
+            <input asp-for="Passaword" class="form-control" />
+            <span asp-valIdation-for="Passaword" class="text-danger"></span>
+        </div>
+
+    <div class="form-group">
+        <label asp-for="State"></label>
+        <select asp-for="State" class="form-control">
+            <option value="">Select State</option>
+            <option value="Alabama">Alabama</option>
+            <option value="Alaska">Alaska</option>
+            <!-- Add more states as needed -->
+        </select>
+        <span asp-valIdation-for="State" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ZipCode"></label>
+        <input asp-for="ZipCode" class="form-control" />
+        <span asp-valIdation-for="ZipCode" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CompanyURL"></label>
+        <input asp-for="CompanyURL" class="form-control" />
+        <span asp-valIdation-for="CompanyURL" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CompanySupportEmail"></label>
+        <input asp-for="CompanySupportEmail" class="form-control" />
+        <span asp-valIdation-for="CompanySupportEmail" class="text-danger"></span>
+    </div>
+
+    @* <div class="form-group">
+        <label asp-for="RedCloudAdmin"></label>
+        <input asp-for="RedCloudAdmin" class="form-control" />
+        <span asp-valIdation-for="RedCloudAdmin" class="text-danger"></span>
+    </div> *@
+@*   <div class="form-group">
+        <label asp-for="RedCloudAdmin"></label>
+        <div class="form-check">
+            <input asp-for="RedCloudAdmin" class="form-check-input" />
+            <label class="form-check-label" for="RedCloudAdmin">Red Cloud Admin</label>
+        </div>
+        <div class="form-check">
+            <input asp-for="RedCloudAdmin" class="form-check-input" />
+            <label class="form-check-label" for="RedCloudAdmin">Red Cloud Admin</label>
+        </div>
+        <span asp-valIdation-for="RedCloudAdmin" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2" >Create</button>
+</form>
+</div>  *@
+
+@*  <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="wIdth=device-wIdth, initial-scale=1.0">
+    <title> Create Reseller Admin</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    </head>
+    <body>
+
+        <div class="col-md-12">
+            <div class="container mt-5">
+                <div class="card card-primary " class="col-md-12">
+                    <div class="card-header">
+                    <h3 class="card-title"> Create Reseller Admin</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                <form asp-action="AddReseller" method="post">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="ResellerName">ResellerName </label>
+                                <input asp-for="ResellerName" class="form-control" Id="ResellerName" placeholder="Enter ResellerName">
+                                <span asp-valIdation-for="ResellerName" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="EIN"> EIN</label>
+                                <input asp-for="EIN" class="form-control" Id="EIN" placeholder="Enter admin name">
+                                <span asp-valIdation-for="EIN" class="text-danger"></span>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label for="Passaword"> Password</label>
+                            <input asp-for="Passaword" class="form-control" Id="Passaword" placeholder="Enter admin password">
+                                <span asp-valIdation-for="Passaword" class="text-danger"></span>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label for="AddressLine1">Address Line 1</label>
+                                <input asp-for="AddressLine1" class="form-control" Id="AddressLine1" placeholder="Enter address line 1">
+                                <span asp-valIdation-for="AddressLine1" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="AddressLine2">Address Line 2</label>
+                                <input asp-for="AddressLine2" class="form-control" Id="AddressLine2" placeholder="Enter address line 2">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="City">City</label>
+                                <input asp-for="City" class="form-control" Id="City" placeholder="Enter city">
+                                <span asp-valIdation-for="City" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="State">State</label>
+                                <select asp-for="State" class="form-control" Id="State">
+                                    <option value="">Select State</option>
+                                    <option value="Alabama">Alabama</option>
+                                    <option value="Alaska">Alaska</option>
+                                    <!-- Add more states as needed -->
+                                </select>
+                                <span asp-valIdation-for="State" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ZipCode">Zip Code</label>
+                                <input asp-for="ZipCode" class="form-control" Id="ZipCode" placeholder="Enter zip code">
+                                <span asp-valIdation-for="ZipCode" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="CompanyURL">CompanyURL </label>
+                                <input asp-for="CompanyURL" class="form-control" Id="CompanyURL" placeholder="Enter organization URL">
+                                <span asp-valIdation-for="CompanyURL" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="CompanySupportEmail">CompanySupportEmail </label>
+                                <input asp-for="CompanySupportEmail" class="form-control" Id="CompanySupportEmail" placeholder="Enter organization URL">
+                                <span asp-valIdation-for="CompanySupportEmail" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="RedCloudAdmin">RedCloudAdmin </label>
+                                <input asp-for="RedCloudAdmin" class="form-control" Id="ResellerName" placeholder="Enter reseller name">
+                                <span asp-valIdation-for="RedCloudAdmin" class="text-danger"></span>
+                            </div>
+
+                        <div class="form-group">
+                            <label for="Passaword"> Password</label>
+                            <input asp-for="Passaword" class="form-control" Id="Passaword" placeholder="Enter admin password">
+                            <span asp-valIdation-for="Passaword" class="text-danger"></span>
+                        </div>
+
+
+                        </div>
+                        <!-- /.card-body -->
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap JS -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html> *@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="wIdth=device-wIdth, initial-scale=1.0">
+    <title>Create Reseller Admin</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Create Reseller Admin</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form asp-action="AddReseller" method="post">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="ResellerName">Reseller Name</label>
+                                        <input asp-for="ResellerName" class="form-control" Id="ResellerName" placeholder="Enter Reseller Name">
+                                        <span asp-valIdation-for="ResellerName" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="EIN">EIN</label>
+                                        <input asp-for="EIN" class="form-control" Id="EIN" placeholder="Enter EIN">
+                                        <span asp-valIdation-for="EIN" class="text-danger"></span>
+                                    </div>
+                                    @*
+                                    <div class="form-group">
+                                    <label for="Passaword">Password</label>
+                                    <input asp-for="Passaword" class="form-control" Id="Passaword" placeholder="Enter password">
+                                    <span asp-valIdation-for="Passaword" class="text-danger"></span>
+                                    </div> *@
+
+                                    <div class="form-group">
+                                        <label for="AddressLine1">Address Line 1</label>
+                                        <input asp-for="AddressLine1" class="form-control" Id="AddressLine1" placeholder="Enter address line 1">
+                                        <span asp-valIdation-for="AddressLine1" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="AddressLine2">Address Line 2</label>
+                                        <input asp-for="AddressLine2" class="form-control" Id="AddressLine2" placeholder="Enter address line 2">
+                                        <span asp-valIdation-for="AddressLine2" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.Partial("_CountryDropDown", countrySelectList)
+                                        <span asp-valIdation-for="CountryId" class="text-danger"></span>
+
+                                    </div>
+                                    <div Id="states" class="form-group">
+
+
+                                        @Html.Partial("_StateDropDown", stateList)
+                                        <span asp-valIdation-for="StateId" class="text-danger"></span>
+
+
+                                    </div>
+
+
+
+                                    <div Id="cities" class="form-group">
+
+                                        @Html.Partial("_CityDropDown", cityList)
+                                        <span asp-valIdation-for="CityId" class="text-danger"></span>
+
+
+                                        <input type="hIdden" Id="CountryId" name="CountryId" />
+                                        <input type="hIdden" Id="StateId" name="StateId" />
+                                        <input type="hIdden" Id="CityId" name="CityId" />
+
+                                    </div>
+                                    @* @Html.Partial("_CountryDropDown", countries)
+
+                                    <div Id="states">
+
+
+                                    @Html.Partial("_StateDropDown", stateList)
+
+
+                                    </div>
+
+
+
+                                    <div Id="cities">
+
+                                    @Html.Partial("_CityDropDown", cityList)
+
+                                    <input type="hIdden" Id="CountryId" name="CountryId" />
+                                    <input type="hIdden" Id="StateId" name="StateId" />
+                                    <input type="hIdden" Id="CityId" name="CityId" />
+
+                                    </div> *@
+                                    @*                                     <div class="form-group">
+                                    <label for="City">City</label>
+                                    <input asp-for="City" class="form-control" Id="City" placeholder="Enter city">
+                                    <span asp-valIdation-for="City" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                    <label for="State">State</label>
+                                    <select asp-for="State" class="form-control" Id="State">
+                                    <option value="">Select State</option>
+                                    <option value="Alabama">Alabama</option>
+                                    <option value="Alaska">Alaska</option>
+                                    <!-- Add more states as needed -->
+                                    </select>
+                                    <span asp-valIdation-for="State" class="text-danger"></span>
+                                    </div> *@
+
+                                    <div class="form-group">
+                                        <label for="ZipCode">Zip Code</label>
+                                        <input type="number" asp-for="ZipCode" class="form-control" Id="ZipCode" placeholder="Enter zip code">
+                                        <span asp-valIdation-for="ZipCode" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="CompanyURL">Company URL</label>
+                                        <input asp-for="CompanyURL" class="form-control" Id="CompanyURL" placeholder="Enter company URL">
+                                        <span asp-valIdation-for="CompanyURL" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="CompanySupportEmail">Company Support Email</label>
+                                        <input asp-for="CompanySupportEmail" class="form-control" Id="CompanySupportEmail" placeholder="Enter company support email">
+                                        <span asp-valIdation-for="CompanySupportEmail" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="RedCloudAdmin">RedCloud Admin</label>
+                                        <select asp-for="RedCloudAdmin" class="form-control">
+                                            <option value="">Select Admin</option>
+                                            @{
+
+                                                foreach (var item in ViewBag.AdminList)
+                                                {
+                                                    <option value="@item.Value">@item.Text</option>
+                                                }
+                                            }
+                                        </select>
+                                        <span asp-valIdation-for="ResellerName" class="text-danger"></span>
+
+                                    </div>
+                                    @*
+                                    <div class="form-group">
+                                    <label for="Passaword">Password</label>
+                                    <input  type="password" asp-for="Passaword" class="form-control" Id="Passaword" placeholder="Enter password">
+                                    <span asp-valIdation-for="Passaword" class="text-danger"></span>
+                                    </div> addition in code*@
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer"> 
+                            <button type="submit" class="btn btn-primary" style="float:right">Create</button>
+                            <a class="btn btn-primary ml-3" style="float:right; margin-right:20px; margin-bottom:20px;background-color:grey; border:none; width: 100px;"
+                               asp-action="ViewallResellerAdmin" asp-controller="ResellerAdminUser">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+@section Scripts {
+    <partial name="_ValIdationScriptsPartial" />
+    <script>
+
+        $(document).ready(function () {
+            $('#countryDropDown').change(function () {
+                var countryId = $('#countryDropDown').val();
+
+
+                $.ajax({
+                    url: '@Url.Action("GetStateByCountryId", "Dropdown")',
+                    data: { countryId: countryId },
+                    type: 'GET',
+                    success: function (data) {
+                        $('#states').empty();
+                        $('#cityDropdown').empty();
+                        $('#cityDropdown').append("<option>Select a city</option>");
+
+                        $('#states').append(data);
+                    }
+                });
+            });
+
+
+
+        });
+
+        function getallCitys() {
+            
+            var stateId = $('#stateDropDown').val();
+
+
+            $.ajax({
+
+                url: '@Url.Action("GetCityByStateId", "Dropdown")',
+                data: { stateId: stateId },
+                type: 'GET',
+                success: function (data) {
+                    $('#cities').empty();
+                    $('#cities').append(data);
+
+                }
+            });
+        }
+
+        // $(document).ready(function () {
+        //     $('#stateDropDown').change(function () {
+        //         debugger
+        //         var stateId = $('#stateDropDown').val();
+        //         $.ajax({
+
+        //             url: '@Url.Action("GetCityByStateId", "Home")',
+        //             data: { stateId: stateId },
+        //             type: 'GET',
+        //             success: function (data) {
+        //                 $('#cities').append(data);
+        //             }
+        //         });
+        //     });
+        // });
+
+
+
+
+
+    </script>
+}
+</html>
+
+
+

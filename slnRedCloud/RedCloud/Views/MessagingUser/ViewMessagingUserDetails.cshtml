@@ -1,0 +1,91 @@
+﻿@model RedCloud.ViewModel.MessagingUsersVM
+
+@{
+    Layout = "_Layout";
+}
+
+<style>
+    .admin-details {
+        margin-bottom: 30px;
+        margin-top: 20px; /* Add some space between sections */
+    }
+
+    .card-custom {
+        background-color: #f8f9fa; /* Light gray background */
+        border-radius: 10px;
+        margin-top: 20px;
+        margin-left: 120px;
+        width: 900px;
+    }
+
+    .card-header-custom {
+        background-color: #007BFF; /* Dark background for header */
+        color: #fff;
+        border-radius: 10px 10px 0 0;
+        padding: 10px 20px;
+    }
+
+        .card-header-custom .logo-text {
+            display: flex;
+            align-items: center;
+        }
+
+            .card-header-custom .logo-text img {
+                width: 50px;
+                margin-right: 10px;
+            }
+
+        .card-header-custom .buttons {
+            margin-left: auto;
+        }
+
+            .card-header-custom .buttons a {
+                color: #fff;
+                margin-left: 10px;
+            }
+</style>
+
+<div class="container mt-5" style="align-content:center">
+    <div class="card card-custom">
+        <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
+            <div class="logo-text">
+                <img src="https://files.axshare.com/gsc/5886BD/e2/ee/cb/e2eecb648f19481093d6b12d28c3beb3/images/view_user_details/u27.svg?pageId=45d84280-2bba-453f-a23a-42e8aeab14be" alt="Organization Admin Logo">
+                <strong>View Organization User Details</strong>
+            </div>
+            <div class="buttons">
+
+                <a href="@Url.Action("UpdateOrganizationUser", new { id = Model.MessagingUserId })" class="btn btn-outline-light">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                <a href="@Url.Action("ViewMessagingUsers", "MessagingUser",new { id = Model.MessagingUserId })" class="btn btn-outline-light">
+                    <i class="fa-solid fa-circle-left"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row" style="margin-left:20px">
+                <div class="col-md-6">
+                    @Html.HiddenFor(x => x.MessagingUserId)
+                    
+                    <div class="admin-details">
+                        <p><strong>Messaging First Name:</strong> @Html.DisplayFor(model => model.MessagingUserFirstName)</p>
+                        <p><strong>Messaging Last Name:</strong> @Html.DisplayFor(model => model.MessagingUserLastName)</p>
+                        <p><strong>Messaging Email ID:</strong> @Html.DisplayFor(model => model.MessagingUserEmail)</p>
+                        <p><strong>Assigned Number:</strong> @Html.DisplayFor(model => model.AssignedNumber)</p>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="text-center mt-4">
+             
+                <a href="@Url.Action("ViewMessagingUsers", "MessagingUser", new { id = Model.MessagingUserId })" class="btn btn-primary">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

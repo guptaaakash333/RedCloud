@@ -1,0 +1,313 @@
+﻿@model IEnumerable<RedCloud.ViewModel.CampaignVM>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Add your custom CSS here */
+
+
+    .dataTables_wrapper .top {
+        margin-top: 0;
+    }
+
+    #dataTable {
+        width: 100% !important;
+    }
+
+    .dt-search {
+        float: right;
+        margin-bottom: 2px;
+    }
+
+    .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        background-color: transparent;
+    }
+
+        .table th,
+        .table td {
+            padding: 1rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .table tbody + tbody {
+            border-top: 2px solid #dee2e6;
+        }
+
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #dee2e6;
+        }
+
+        .table-bordered thead th,
+        .table-bordered thead td {
+            border-bottom-width: 2px;
+        }
+
+    .status-active {
+        color: white;
+        background-color: green;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.25rem;
+    }
+
+    .status-inactive {
+        color: white;
+        background-color: red;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.25rem;
+    }
+
+    .btn-action {
+        margin-right: 0.5rem;
+    }
+
+    /* Custom CSS for DataTables Buttons */
+    .dt-button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 0.25rem;
+        padding: 0.5rem 1rem;
+        margin: 0.2rem;
+        font-size: 0.875rem;
+        cursor: pointer;
+    }
+
+        .dt-button:hover {
+            background-color: #0056b3;
+        }
+
+    /* Custom CSS for DataTables Pagination */
+    .dataTables_paginate .paginate_button {
+        background-color: #007bff;
+        color: white !important;
+        border: none;
+        border-radius: 0.25rem;
+        padding: 0.5rem 1rem;
+        margin: 0.2rem;
+        font-size: 0.875rem;
+        cursor: pointer;
+    }
+
+        .dataTables_paginate .paginate_button:hover {
+            background-color: #0056b3;
+        }
+
+        .dataTables_paginate .paginate_button.current {
+            background-color: #0056b3;
+            color: white !important;
+        }
+
+    /* Custom CSS for Entries Dropdown */
+    .dataTables_length select {
+        border: 1px solid #007bff;
+        border-radius: 0.25rem;
+        padding: 0.25rem;
+        margin: 0.2rem;
+    }
+</style>
+
+<form method="post" id="user-query-form" action="" novalidate="novalidate">
+    <div class="card-body">
+        <div class="card">
+            <div class="card-header" style="background-color:#007BFF">
+                <h3 class="card-title" style="color:white; font-weight:bold;font-size:23px;">Campaign List</h3>
+            </div>
+            <div class="card-body">
+                <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="dt-search">
+                                <a type="button" class="btn btn-primary" asp-action="Index" asp-controller="Campaign">Add Campaign </a>
+                                
+                            </div>
+
+                            <label for="entriesPerPage">
+                                Show Entries
+                                <select id="entriesPerPage" class="custom-select custom-select-sm form-control form-control-sm">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </label>
+
+                            <table id="dataTable" class="table table-bordered table-striped dataTable dtr-inline" aria-describedby="dataTable_info">
+                                <thead>
+                                    <tr>
+                                        <th hidden>Id</th>
+                                        <th>CompanyName</th>
+                                        <th>EIN</th>
+                                        <th>Brand Id</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var admins in Model)
+                                    {
+                                        <tr>
+                                            <td hidden>@admins.CampaignId</td>
+                                            <td>@admins.CompanyName</td>
+                                            <td>@admins.UniversalEIN</td>
+                                            <td>@admins.BrandId</td>
+                                            <td>
+                                                @admins.IdentityStatus
+                                            </td>
+                                            <td>
+                                                <a asp-action="ViewCampaignById" asp-controller="Campaign" asp-route-id="@admins.CampaignId" class="btn-action">
+                                                    <i class="fa-solid fa-eye" style="color: #050505;"></i>
+                                                </a>
+                                                @*<a asp-action="" asp-controller="" class="btn-action">
+                                                    <i class="fa-regular fa-pen-to-square" style="color: #131111;"></i>
+                                                </a>*@
+                                                <a class="delete-btn btn-action" data-id="@admins.CampaignId" data-name="@admins.CompanyName">
+                                                    <i class="fa-solid fa-trash" style="color: #cb1010;"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" id="cancelBtn" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <span id="deleteItemName"></span>?</p>
+            </div>
+           @*  <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div> *@
+            <div class="modal-footer">
+                <button id="cancelBtnToast" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": "1200",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            var table = $('#dataTable').DataTable({
+                paging: true,
+                searching: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'csvHtml5',
+                        text: 'Export CSV',
+                        className: 'dt-button'
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Export Excel',
+                        className: 'dt-button'
+                    }
+                ],
+                pageLength: 10
+            });
+
+            $('#entriesPerPage').on('change', function () {
+                var newLength = $(this).val();
+                table.page.len(newLength).draw();
+            });
+
+            $('.delete-btn').on('click', function (e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+                var name = $(this).data('name');
+                $('#deleteItemName').text(name);
+                $('#confirmDeleteBtn').attr('data-id', id);
+                $('#deleteConfirmationModal').modal('show');
+            });
+
+            $('#cancelBtn').on('click', function (e) {
+                $('#deleteConfirmationModal').modal('hide');
+            });
+            $('#cancelBtnToast').on('click', function (e) {
+                $('#deleteConfirmationModal').modal('hide');
+            });
+
+            $('#confirmDeleteBtn').on('click', function () {
+                var id = $(this).attr('data-id');
+                $('#deleteConfirmationModal').modal('hide');
+                $.get('/Campaigndetail/SoftDeleteCampaign/' + id)
+                    .done(function (data) {
+                        toastr.success('Deleted Successfully');
+                        //location.reload();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    })
+                    .fail(function (xhr, status, error) {
+                        console.error(xhr, status, error);
+                        toastr.error('Error: ' + xhr.responseText);
+                    });
+            });
+        });
+    </script>
+}

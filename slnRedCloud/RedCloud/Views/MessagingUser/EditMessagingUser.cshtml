@@ -1,0 +1,100 @@
+﻿@model RedCloud.ViewModel.MessagingUsersVM
+
+@{
+    ViewData["Title"] = "Edit Messaging User";
+    Layout = "_Layout";
+}
+
+<style>
+    .required::before {
+        content: "*";
+        color: red;
+        margin-right: 3px;
+    }
+
+    .mandatory-message {
+        color: red;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-check-label {
+        margin-left: 10px;
+    }
+
+    .display_none{
+        display:none;
+    }
+</style>
+
+<div class="container-fluid d-flex justify-content-center align-items-center vh-100" style="background-color:white">
+    <div class="col-md-12">
+        <div class="card card-primary">
+            <div class="card-header bg-primary">
+                <h3 class="card-title">Edit Messaging User</h3>
+            </div>
+            <div class="mandatory-message">
+                * marked fields are mandatory.
+            </div>
+            <form asp-action="EditMessagingUser" method="post">
+                <div class="card-body">
+                    <div class="row">
+                        <input  type="hidden" asp-for="MessagingUserId" />
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="MessagingUserFirstName" class="control-label required"></label>
+                                <input asp-for="MessagingUserFirstName" class="form-control" placeholder="Enter First Name" />
+                                <span asp-validation-for="MessagingUserFirstName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="MessagingUserLastName" class="control-label required"></label>
+                                <input asp-for="MessagingUserLastName" class="form-control" placeholder="Enter Last Name" />
+                                <span asp-validation-for="MessagingUserLastName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="MessagingUserEmail" class="control-label required"></label>
+                                <input asp-for="MessagingUserEmail" class="form-control" placeholder="Enter EmailId" />
+                                <span asp-validation-for="MessagingUserEmail" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="AssignedNumber" class="control-label required"></label>
+                                <input asp-for="AssignedNumber" class="form-control" pattern="\d{10}" placeholder="Enter 10-digit number" />
+                                <span asp-validation-for="AssignedNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="MessagingUserType" class="control-label required"></label>
+                                <select asp-for="MessagingUserType" asp-items='new SelectList(new[] {
+                                         new SelectListItem { Text = "Admin user", Value = "Admin user" },
+                                         new SelectListItem { Text = "Messaging user", Value = "Messaging user" }
+                                         }, "Value", "Text")' class="form-control" placeholder="-- Select User Type --" required>
+                                    <option value="">-- Select User Type --</option>
+                                </select>
+                                <span asp-validation-for="MessagingUserType" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group form-check">
+                                <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                                <label asp-for="IsActive" class="form-check-label"></label>
+                                <span asp-validation-for="IsActive" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Edit Messaging User</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='@Url.Action("ViewMessagingUsers", "MessagingUser")'">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

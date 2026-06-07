@@ -1,0 +1,682 @@
+﻿
+@{
+    ViewData["Title"] = "Viewallnumberslist";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@* <h1>Viewallnumberslist</h1> *@
+
+@model IEnumerable<RedCloud.ViewModel.NumberlistVM>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .dataTables_wrapper .top {
+        margin-top: 0;
+    }
+
+    #dataTable {
+        width: 100% !important;
+    }
+
+    .dt-search {
+        float: right;
+        margin-bottom: 2px;
+    }
+
+    .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        background-color: transparent;
+    }
+
+        .table th,
+        .table td {
+            padding: 1rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .table tbody + tbody {
+            border-top: 2px solid #dee2e6;
+        }
+
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #dee2e6;
+        }
+
+        .table-bordered thead th,
+        .table-bordered thead td {
+            border-bottom-width: 2px;
+        }
+
+    .status-active {
+        color: white;
+        background-color: green;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.25rem;
+    }
+
+    .status-inactive {
+        color: white;
+        background-color: red;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.25rem;
+    }
+
+    .btn-action {
+        margin-right: 0.5rem;
+    }
+
+    / Custom CSS for DataTables Buttons /
+    .dt-button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 0.25rem;
+        padding: 0.5rem 1rem;
+        margin: 0.2rem;
+        font-size: 0.875rem;
+        cursor: pointer;
+    }
+
+    .dt-button:hover {
+        background-color: #0056b3;
+    }
+
+    / Custom CSS for DataTables Pagination /
+    .dataTables_paginate .paginate_button {
+        background-color: #007bff;
+        color: white !important;
+        border: none;
+        border-radius: 0.25rem;
+        padding: 0.5rem 1rem;
+        margin: 0.2rem;
+        font-size: 0.875rem;
+        cursor: pointer;
+    }
+
+    .dataTables_paginate .paginate_button:hover {
+        background-color: #0056b3;
+    }
+
+    .dataTables_paginate .paginate_button.current {
+        background-color: #0056b3;
+        color: white !important;
+    }
+
+    / Custom CSS for Entries Dropdown /
+    .dataTables_length select {
+        border: 1px solid #007bff;
+        border-radius: 0.25rem;
+        padding: 0.25rem;
+        margin: 0.2rem;
+    }
+</style>
+
+<form method="post" id="user-query-form" action="/Number/AddNumber" novalidate="novalidate">
+    <div class="card-body">
+
+        <div class="card">
+            <div class="card-header" style="background-color:#007BFF">
+                <h3 class="card-title" style="color:white; font-weight:bold;font-size:23px;">Manage Number</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p>
+                                <a class="btn btn-primary" asp-action="AddNumber" asp-controller="Number"
+                                   style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; float:right; margin-bottom:10px">
+                                    Add Number 
+                                </a>
+                            </p>
+                            <label for="entriesPerPage">
+                                Show Entries
+                                <select id="entriesPerPage" class="custom-select custom-select-sm form-control form-control-sm">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </label>
+                            <table id="dataTable" class="table table-bordered table-striped dataTable dtr-inline" aria-describedby="dataTable_info">
+                                <thead>
+                                    <tr>
+                                        <th>NumberId</th>
+                                        <th>Number</th>
+                                        <th>Carrier</th>
+                                        <th>Organization</th>
+                                        <th>Type</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@Html.DisplayFor(modelItem => item.NumberId)</td>
+                                            <td>
+                                                <a href="@Url.Action("GetNumberById", "Number", new { id = item.NumberId })">
+                                                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                                                </a>
+                                            </td>
+                                            <td>@Html.DisplayFor(modelItem => item.CarrierName)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.OrgName)</td>
+                                            <td>
+                                                <span class="@(item.IsActive ? "status-active" : "status-inactive")">
+                                                    @((bool)item.IsActive ? "Active" : "Not Active")
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <a asp-action="Viewassignednumber" asp-controller="Number" asp-route-id="@item.NumberId" class="btn-action">
+                                                    <i class="fa-solid fa-eye" style="color: #050505;"></i>
+                                                </a>
+
+                                                <a asp-action="UpdateAssignedNumber" asp-controller="Number" asp-route-id="@item.NumberId" class="btn-action">
+                                                    <i class="fa-regular fa-pen-to-square" style="color: #131111;"></i>
+                                                </a>
+
+                                                <a asp-action="AssignNumber" asp-controller="Number" asp-route-id="@item.NumberId" class="btn-action">
+                                                    <i class="fa-solid fa-square-share-nodes"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+
+        <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Delete</h5>
+                        <button type="button" class="close" data-dismiss="modal" id="cancelBtn2" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete <span id="deleteItemName"></span>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+ @section Scripts {
+    <!-- Include necessary libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <!-- DataTables CSS and JS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTable
+            var table = $('#dataTable').DataTable({
+                paging: true,
+                searching: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'csvHtml5',
+                        text: 'Export CSV',
+                        className: 'dt-button'
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Export Excel',
+                        className: 'dt-button'
+                    }
+                ]
+            });
+
+            // Change entries per page
+            $('#entriesPerPage').change(function () {
+                var length = $(this).val();
+                table.page.len(length).draw();
+            });
+
+            // Set up Toastr options
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": "1200",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            // Event listeners for delete functionality
+            $('.delete-btn').on('click', function (e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+                var name = $(this).data('name');
+                $('#deleteItemName').text(name);
+                $('#confirmDeleteBtn').attr('data-id', id);
+                $('#deleteConfirmationModal').modal('show');
+            });
+
+            $('#cancelBtn').on('click', function (e) {
+                $('#deleteConfirmationModal').modal('hide');
+            });
+
+            $('#cancelBtn2').on('click', function (e) {
+                $('#deleteConfirmationModal').modal('hide');
+            });
+
+            $('#confirmDeleteBtn').on('click', function () {
+                var id = $(this).attr('data-id');
+                $('#deleteConfirmationModal').modal('hide');
+
+                // Call delete method using AJAX
+                $.ajax({
+                    url: '/OrganizationAdmin/SoftDelete/' + id,
+                    type: 'GET',
+                    success: function (data) {
+                        // Handle success
+                        toastr.success('Successfully deleted the item.', 'Success');
+                        // Optionally, you can reload the page or update the table
+
+                        setTimeout(function () {
+                            window.location.href = '@Url.Action("ViewOrganizationAdmin", "OrganizationAdmin")';
+                        }, 1000);
+
+                        // setTimeout(function () {
+                        //     location.reload();
+                        // }, 1000);
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle errors
+                        toastr.error('Error: ' + xhr.responseText, 'Deletion Failed');
+                    }
+                });
+
+            });
+
+        });
+    </script>
+}
+
+ 
+@* ===============================
+
+    @{
+    ViewData["Title"] = "Viewallnumberslist";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .dataTables_wrapper .top {
+        margin-top: 0;
+    }
+
+    #dataTable {
+        width: 100% !important;
+    }
+
+    .dt-search {
+        float: right;
+        margin-bottom: 2px;
+    }
+
+    .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        background-color: transparent;
+    }
+
+        .table th,
+        .table td {
+            padding: 1rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .table tbody + tbody {
+            border-top: 2px solid #dee2e6;
+        }
+
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #dee2e6;
+        }
+
+        .table-bordered thead th,
+        .table-bordered thead td {
+            border-bottom-width: 2px;
+        }
+
+    .status-active {
+        color: white;
+        background-color: green;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.25rem;
+    }
+
+    .status-inactive {
+        color: white;
+        background-color: red;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.25rem;
+    }
+
+    .btn-action {
+        margin-right: 0.5rem;
+    }
+
+    / Custom CSS for DataTables Buttons /
+    .dt-button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 0.25rem;
+        padding: 0.5rem 1rem;
+        margin: 0.2rem;
+        font-size: 0.875rem;
+        cursor: pointer;
+    }
+
+    .dt-button:hover {
+        background-color: #0056b3;
+    }
+
+    / Custom CSS for DataTables Pagination /
+    .dataTables_paginate .paginate_button {
+        background-color: #007bff;
+        color: white !important;
+        border: none;
+        border-radius: 0.25rem;
+        padding: 0.5rem 0.75rem;
+        margin: 0.2rem;
+        font-size: 0.875rem;
+        cursor: pointer;
+    }
+
+    .dataTables_paginate .paginate_button:hover {
+        background-color: #0056b3;
+        color: white !important;
+    }
+
+    / Custom CSS for DataTables Length /
+    .dataTables_length select {
+        display: inline-block;
+        width: auto;
+        height: calc(1.5em + 0.75rem + 2px);
+        padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+        font-size: 0.875rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        vertical-align: middle;
+        background: #fff url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTYgMTYiIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gPHBhdGggZmlsbD0iI0FFQ0NFRiIgZD0iTTAgNGg0TDggMEwxMiA0aDR2MkgwVjR6bTEyIDZoNHYyaC00VjZ6bS0xMiA1bDQgNEw4IDE2bC00LTRoNHYyWiIgLz48L3N2Zz4=") no-repeat right 0.75rem center;
+        background-size: 8px 10px;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+</style>
+
+<div class="container">
+    <h1 class="my-4">@ViewData["Title"]</h1>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Number List</h3>
+            <a class="btn btn-primary" style="float:right; margin-right:10px;" data-toggle="modal" data-target="#uploadModal">
+                Upload File
+            </a>
+        </div>
+        <div class="card-body">
+            <table id="dataTable" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>NumberId</th>
+                        <th>Number</th>
+                        <th>Carrier</th>
+                        <th>Organization</th>
+                        <th>Type</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.NumberId</td>
+                            <td>@item.PhoneNumber</td>
+                            <td>@item.CarrierName</td>
+                            <td>@item.OrgName</td>
+                            <td>
+                                <span class="@(item.IsActive ? "status-active" : "status-inactive")">
+                                    @((bool)item.IsActive ? "Active" : "Not Active")
+                                </span>
+                            </td>
+                            <td>
+                                <a asp-action="Viewassignednumber" asp-controller="Number" asp-route-id="@item.NumberId" class="btn-action">
+                                    <i class="fa-solid fa-eye" style="color: #050505;"></i>
+                                </a>
+
+                                <a asp-action="UpdateAssignedNumber" asp-controller="Number" asp-route-id="@item.NumberId" class="btn-action">
+                                    <i class="fa-regular fa-pen-to-square" style="color: #131111;"></i>
+                                </a>
+
+                                <a asp-action="AssignNumber" asp-controller="Number" asp-route-id="@item.NumberId" class="btn-action">
+                                    <i class="fa-solid fa-square-share-nodes"></i>
+                                </a>
+                            </td>
+
+                          
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- File Upload Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadModalLabel">Single File Upload</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-controller="FileUpload" asp-action="SingleFileUpload" enctype="multipart/form-data">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label for="SingleFile">Choose file</label>
+                        <input type="file" name="SingleFile" class="form-control" id="SingleFile" />
+                    </div>
+                    <button type="submit" name="Upload" class="btn btn-primary">Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Include necessary libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <!-- DataTables CSS and JS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTable
+            var table = $('#dataTable').DataTable({
+                paging: true,
+                searching: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'csvHtml5',
+                        text: 'Export CSV',
+                        className: 'dt-button'
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Export Excel',
+                        className: 'dt-button'
+                    }
+                ]
+            });
+
+            // Change entries per page
+            $('#entriesPerPage').change(function () {
+                var length = $(this).val();
+                table.page.len(length).draw();
+            });
+
+            // Set up Toastr options
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": "1200",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            // Event listeners for delete functionality
+            $('.delete-btn').on('click', function (e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+                var name = $(this).data('name');
+                $('#deleteItemName').text(name);
+                $('#confirmDeleteBtn').attr('data-id', id);
+                $('#deleteConfirmationModal').modal('show');
+            });
+
+            $('#cancelBtn').on('click', function (e) {
+                $('#deleteConfirmationModal').modal('hide');
+            });
+
+            $('#cancelBtn2').on('click', function (e) {
+                $('#deleteConfirmationModal').modal('hide');
+            });
+
+            $('#confirmDeleteBtn').on('click', function () {
+                var id = $(this).attr('data-id');
+                $('#deleteConfirmationModal').modal('hide');
+
+                // Call delete method using AJAX
+                $.ajax({
+                    url: '/OrganizationAdmin/SoftDelete/' + id,
+                    type: 'GET',
+                    success: function (data) {
+                        // Handle success
+                        toastr.success('Successfully deleted the item.', 'Success');
+                        // Optionally, you can reload the page or update the table
+                        setTimeout(function () {
+                            window.location.href = '@Url.Action("ViewOrganizationAdmin", "OrganizationAdmin")';
+                        }, 1000);
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle errors
+                        toastr.error('Error: ' + xhr.responseText, 'Deletion Failed');
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+ *@

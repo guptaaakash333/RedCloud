@@ -1,0 +1,211 @@
+﻿<style>
+    .rateTable {
+        width: 100% !important;
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #007bff;
+        color: white;
+        padding: 15px;
+    }
+
+    .card-title {
+        margin: 0;
+        font-size: 1.5em;
+    }
+
+    .card-body {
+        padding: 30px;
+    }
+
+    .dt-search {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+    }
+
+    .table {
+        margin-bottom: 0;
+        border-collapse: separate;
+        border-spacing: 0 15px;
+    }
+
+        .table th,
+        .table td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 15px;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+        }
+
+    .container {
+        max-width: 100%;
+    }
+
+    .summary-container {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 30px;
+    }
+
+    .summary-box {
+        display: inline-block;
+        width: 15%;
+        padding: 0px;
+        margin: 10px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        text-align: center;
+        background-color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+        .summary-box .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .summary-box .label {
+            font-size: 1.2em;
+            color: #333;
+        }
+
+    .filter-group {
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        background-color: #f0f0f0;
+        padding: 11px;
+        border: 1px solid #ccc;
+    }
+
+        .filter-group label {
+            margin-right: 10px;
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .filter-group input[type="date"],
+        .filter-group button {
+            padding: 12px 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1.2em;
+        }
+
+        .filter-group button {
+            margin-left: 10px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .filter-group button:hover {
+                background-color: #0056b3;
+            }
+</style>
+
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header">
+            <h3 class="card-title"><strong>Rated Usage</strong></h3>
+        </div>
+        <div class="card-body">
+            <div class="summary-container">
+                <div class="summary-box">
+                    <div class="value">@Model.Users</div>
+                    <div class="label">Total Users</div>
+                </div>
+                <div class="summary-box">
+                    <div class="value">@Model.MessageInbound</div>
+                    <div class="label">Total Inbound SMS</div>
+                </div>
+                <div class="summary-box">
+                    <div class="value">@Model.MessageOutbound</div>
+                    <div class="label">Total Outbound SMS</div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label for="fromDate">Type :</label>
+                @Model.TypeName
+            </div>
+
+            <table id="reportTable" class="table table-bordered table-striped rateTable">
+                <thead>
+                    <tr>
+                        <th>Usage Elements</th>
+                        <th>Rate</th>
+                        <th>Usage/Count</th>
+                        <th>Credit Used</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var report in Model.getRatedUsageLists)
+                    {
+                        <tr>
+                            <td>@report.UsageElements</td>
+                            <td>@report.Rate</td>
+                            <td>250</td>
+                            <td>2500</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <a asp-controller="ResellerAssignCredit" asp-action="ListRate" class="btn btn-secondary btn-sm">Back</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var table = $('#reportTable').DataTable({
+                searching: true,
+                paging: false,
+                order: [] // Clear any default ordering
+            });
+
+            $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var min = $('#fromDate').val() ? moment($('#fromDate').val()) : null;
+                    var max = $('#toDate').val() ? moment($('#toDate').val()) : null;
+                    var date = moment(data[2], "YYYY-MM-DD HH:mm:ss");
+
+                    if (
+                        (!min && !max) ||
+                        (!min && date <= max) ||
+                        (min <= date && !max) ||
+                        (min <= date && date <= max)
+                    ) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+
+            // Apply the search
+            $('#fromDate, #toDate').on('change', function () {
+                table.draw();
+            });
+        });
+    </script>
+}

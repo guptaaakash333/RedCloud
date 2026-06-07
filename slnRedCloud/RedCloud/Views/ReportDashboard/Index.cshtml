@@ -1,0 +1,97 @@
+﻿
+
+@model IEnumerable<RedCloud.ViewModel.FullOrgReportVM>
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: Arial, sans-serif; 
+        margin: 0;
+        padding: 0;
+    }
+
+    .dashboard {
+        display: flex;
+        justify-content: center;
+        margin-top: 50px;
+        flex-wrap: wrap; 
+    }
+
+    .card {
+        width: calc(33.33% - 40px);
+        margin: 20px;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+        text-align: center;
+        transition: transform 0.3s ease;
+        overflow: hidden; 
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .card:nth-child(1) {
+            background-color: #007bff;
+        }
+
+        .card:nth-child(2) {
+            background-color: #28a745; 
+        }
+
+        .card:nth-child(3) {
+            background-color: #dc3545;
+        }
+
+    .card-title {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+        color: #ffffff; 
+    }
+
+    .card-value {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #ffffff;
+    }
+
+    .card a {
+        text-decoration: none;
+        color: inherit; 
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: auto;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="dashboard">
+        <div class="card">
+            <div class="card-title">All Inbound Messages</div>
+            <div class="card-value">
+                <a asp-controller="Report" asp-action="ViewInboundReport">Inbound Report</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title">All Outbound Messages</div>
+            <div class="card-value">
+                <a asp-controller="Report" asp-action="ViewOutboundReport">Outbound Report</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title">Organization Report</div>
+            <div class="card-value">
+                <a asp-controller="Report" asp-action="ViewFullOrgReport">Organization Report</a>
+            </div>
+        </div>
+    </div>
+</div>

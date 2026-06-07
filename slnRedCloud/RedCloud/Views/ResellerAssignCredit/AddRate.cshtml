@@ -1,0 +1,82 @@
+﻿@model RedCloud.ViewModel.RateAssignCreditVM
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Create Organization Admin</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form asp-action="AddRate" method="post" id="user-query-form">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">                                
+                                <div class="form-group">
+                                    <label for="OrgID">Organization</label>                                    
+                                    <select asp-for="OrgID " class="form-control"
+                                            asp-items="@(new SelectList(ViewBag.listOrg,"OrgID","OrgName"))" required>
+                                        <option value="">Select Orgaization</option>
+                                    </select>
+                                    <span asp-validation-for="OrgID" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="TypeId">Type</label>
+                                    <select asp-for="TypeId " class="form-control"
+                                            asp-items="@(new SelectList(ViewBag.listTypes,"TypeId","TypeName"))" required>
+                                        <option value="">Select Type</option>
+                                    </select>
+                                    <span asp-validation-for="TypeId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="InboundSMS">InboundSMS</label>
+                                    <input class="form-control" asp-for="InboundSMS" placeholder="Enter InboundSMS">
+                                    <span asp-validation-for="InboundSMS" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="OutboundSMS">OutboundSMS</label>
+                                    <input class="form-control" asp-for="OutboundSMS" placeholder="Enter OutboundSMS">
+                                    <span asp-validation-for="OutboundSMS" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="InboundMMS">InboundMMS</label>
+                                    <input class="form-control" asp-for="InboundMMS" placeholder="Enter InboundMMS">
+                                    <span asp-validation-for="InboundMMS" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="OutboundMMS">OutboundMMS</label>
+                                    <input class="form-control" asp-for="OutboundMMS" placeholder="Enter OutboundMMS">
+                                    <span asp-validation-for="OutboundMMS" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="MonthlyNumber">MonthlyNumber</label>
+                                    <input class="form-control" asp-for="MonthlyNumber" placeholder="Enter MonthlyNumber">
+                                    <span asp-validation-for="MonthlyNumber" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Users">Users</label>
+                                    <input class="form-control" asp-for="Users" placeholder="Enter Users">
+                                    <span asp-validation-for="Users" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col-5"></div>
+                            <div class="col-2">
+                                <button type="submit" class="btn btn-primary ml-3">Add</button>
+                            </div>
+                            <div class="col-5"></div>                            
+                        </div>
+                        
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

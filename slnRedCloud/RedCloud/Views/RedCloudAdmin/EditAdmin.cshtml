@@ -1,0 +1,78 @@
+﻿@model RedCloud.Application.Features.RedCloudAdmins.Commands.CreateRedCloudAdmin.RedCloudAdminVM;
+
+@{
+    ViewData["Title"] = "Edit Admin User";
+    Layout = "_Layout";
+}
+
+<style>
+    .required::before {
+        content: "*";
+        color: red;
+        margin-right: 3px;
+    }
+
+    .mandatory-message {
+        color: red;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="container-fluId d-flex justify-content-center align-items-center" style="height: 100vh">
+    <div class="col-md-6">
+        <div class="mb-3">
+            @* <a asp-action="ViewallRedCloudAdmin" asp-controller="RedCloudAdmin" class="btn btn-secondary">Back</a> *@
+            @* <a asp-action="AssignReseller" asp-controller="RedCloudAdmin" class="btn btn-warning">Assign Reseller</a> *@
+
+        </div>
+        <div class="card card-primary">
+            <div class="card-header bg-primary">
+                <h3 class="card-title">Edit Admin User</h3>
+            </div>
+            <div class="mandatory-message">
+                * marked fields are mandatory.
+            </div>
+            <form asp-action="EditAdmin" asp-controller="RedCloudAdmin" method="post">
+                <input type="hIdden" asp-for="RedCloudAdminUserId" />
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="FirstName" class="required">First Name</label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-valIdation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="LastName" class="required">Last Name</label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-valIdation-for="LastName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Email" class="required">Email</label>
+                        <input asp-for="Email" class="form-control" mailto:placeholder="abcxyz@redcloud.com" />
+                        <span asp-valIdation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="MobileNumber" class="required">Mobile Number</label>
+                        <input asp-for="MobileNumber" class="form-control" placeholder="1234567890" />
+                        <span asp-valIdation-for="MobileNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group form-check">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                        <label class="form-check-label" for="IsActive">Is Active</label>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a asp-action="ViewallRedCloudAdmin" asp-controller="RedCloudAdmin" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValIdationScriptsPartial" />
+}

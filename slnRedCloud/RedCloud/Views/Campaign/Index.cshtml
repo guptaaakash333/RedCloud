@@ -1,0 +1,290 @@
+﻿@model RedCloud.ViewModel.CampaignVM;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <!-- Popper.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+</head>
+
+<body>
+    <!-- Button to Open the Modal -->
+    @* <button type="button" class="btn btn-primary mt-4" data-toggle="modal" data-target="#myModal">
+        Add Campaign
+    </button> *@
+
+    <!-- Button to Open the Modal -->
+    <button hidden id="openModalBtn" type="button" class="btn btn-primary mt-4" data-toggle="modal" data-target="#myModal">
+        Add Campaign
+    </button>
+
+
+
+    <!-- The Modal -->
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Select Options</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <form id="modalForm">
+                        <div class="error-container-message"></div>
+                        <div class="form-group">
+                            <label for="reseller">Choose Reseller:</label>
+                            <select class="form-control" id="reseller" asp-items="@ViewBag.ResellerUserList">
+                                <option value="">Select Reseller</option>
+                            </select>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="organization">Choose Organization:</label>
+                            <select class="form-control" id="organization" asp-items="@ViewBag.OrganizationUserList">
+                                <option value="" >select Organization </option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="proceedButton">Proceed</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Placeholder for the form -->
+    <div id="formContainer"></div>
+
+    <!-- Hidden div with form content -->
+    <div id="hiddenFormContent" style="display:none;">
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Add Campaign </h3>
+                        </div>
+                        <form asp-controller="Campaign" asp-action="AddCampaign" method="post" id="campaign-form">
+                            <span asp-validation-summary="ModelOnly"></span>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="OrganizationUserId">Organization :</label>
+                                            <input hidden asp-for="OrganizationUserId" class="form-control" id="OrganizationUserId">
+                                            <input class="form-control" id="OrganizationUserName" readonly >
+@*                                             <span asp-validation-for="OrganizationUserId" class="text-danger"></span>
+ *@                                        </div>
+                                        <div class="form-group">
+                                            <label for="ResellerUserId">Reseller :</label>
+                                            <input hidden asp-for="ResellerUserId" class="form-control" id="ResellerUserId" readonly>
+                                            <input class="form-control" id="ResellerUserName" readonly>
+@*                                             <span asp-validation-for="ResellerUserId" class="text-danger"></span>
+ *@                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="CompanyName">Legal Company Name</label>
+                                            <input asp-for="CompanyName" class="form-control" id="CompanyName" placeholder="Enter Company Name">
+                                            <span asp-validation-for="CompanyName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="UniversalEIN">Universal EIN</label>
+                                            <input asp-for="UniversalEIN" class="form-control" id="UniversalEIN" placeholder="Enter Universal EIN">
+                                            <span asp-validation-for="UniversalEIN" class="text-danger"></span>
+                                        </div>
+                                       
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="BrandId">Brand ID</label>
+                                            <input type="text" asp-for="BrandId" class="form-control" id="BrandId" placeholder="Enter Brand ID">
+                                            <span asp-validation-for="BrandId" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="IdentityStatus">Identity Status</label>
+                                            <select asp-for="IdentityStatus" class="form-control" id="IdentityStatus">
+                                                <option value="">Select Status</option>
+                                                <option value="Active">Verified</option>
+                                                <option value="Inactive">Inactive</option>
+                                                <option value="Pending">InProgress</option>
+                                            </select>
+                                            <span asp-validation-for="IdentityStatus" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="BrandRelationship">Brand Relationship</label>
+                                            <input asp-for="BrandRelationship" class="form-control" id="BrandRelationship" placeholder="Enter Brand Relationship">
+                                            <span asp-validation-for="BrandRelationship" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="BrandRegistrationDate">Brand Registration Date</label>
+                                            <input asp-for="BrandRegistrationDate" class="form-control" id="BrandRegistrationDate" placeholder="Enter Brand Registration Date" type="date">
+                                            <span asp-validation-for="BrandRegistrationDate" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <h3 class="section-title">Create Campaign</h3>
+                                <hr />
+                                <div class="container mt-5">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <button type="button" class="btn btn-primary" style="position: absolute; right: 24px; bottom: 26rem;" onclick="toggleSecondDiv()">
+                                                    <i class="fa-solid fa-circle-plus"></i>
+                                                </button>
+
+                                                <label for="CampaignIdOne">Campaign ID One</label>
+                                                <input asp-for="CampaignIdOne" class="form-control" id="CampaignIdOne" placeholder="Enter Campaign ID One" >
+                                                <span asp-validation-for="CampaignIdOne" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="UseCaseOne">Use Case One</label>
+                                                <input asp-for="UseCaseOne" class="form-control" id="UseCaseOne" placeholder="Enter Use Case One" >
+                                                <span asp-validation-for="UseCaseOne" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="RegistrationDateOne">Registration Date One</label>
+                                                <input asp-for="RegistrationDateOne" class="form-control" id="RegistrationDateOne" placeholder="Enter Registration Date One" type="date" >
+                                                <span asp-validation-for="RegistrationDateOne" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="RenewalDateOne">Renewal Date One</label>
+                                                <input asp-for="RenewalDateOne" class="form-control" id="RenewalDateOne" placeholder="Enter Renewal Date One" type="date" >
+                                                <span asp-validation-for="RenewalDateOne" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="CampaignDescriptionOne">Campaign Description One</label>
+                                                <input asp-for="CampaignDescriptionOne" class="form-control" id="CampaignDescriptionOne" placeholder="Enter Campaign Description One">
+                                                <span asp-validation-for="CampaignDescriptionOne" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" id="secondDiv" style="display: none;">
+                                            <div class="form-group">
+                                                <label for="CampaignIdTwo">Campaign ID Two</label>
+                                                <input asp-for="CampaignIdTwo" class="form-control" id="CampaignIdTwo" placeholder="Enter Campaign ID Two">
+                                                <span asp-validation-for="CampaignIdTwo" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="UseCaseTwo">Use Case Two</label>
+                                                <input asp-for="UseCaseTwo" class="form-control" id="UseCaseTwo" placeholder="Enter Use Case Two">
+                                                <span asp-validation-for="UseCaseTwo" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="RegistrationDateTwo">Registration Date Two</label>
+                                                <input asp-for="RegistrationDateTwo" class="form-control" id="RegistrationDateTwo" placeholder="Enter Registration Date Two" type="date">
+                                                <span asp-validation-for="RegistrationDateTwo" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="RenewalDateTwo">Renewal Date Two</label>
+                                                <input asp-for="RenewalDateTwo" class="form-control" id="RenewalDateTwo" placeholder="Enter Renewal Date Two" type="date">
+                                                <span asp-validation-for="RenewalDateTwo" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="CampaignDescriptionTwo">Campaign Description Two</label>
+                                                <input asp-for="CampaignDescriptionTwo" class="form-control" id="CampaignDescriptionTwo" placeholder="Enter Campaign Description Two">
+                                                <span asp-validation-for="CampaignDescriptionTwo" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer text-right">
+                                <a class="btn btn-secondary ml-3" asp-action="Index" asp-controller="Campaign">Back</a>
+                                <button type="submit" class="btn btn-primary ml-3">Create</button>
+                            </div>
+                            <partial name="_ValidationScriptsPartial" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/jquery.validate.min.js"></script>
+ 
+    <script>
+
+
+        $(document).ready(function () {
+            $("#openModalBtn").click();
+            $('#proceedButton').click(function () {
+                // Validate the form
+                //debugger
+                // var isValid = $('#modalForm').valid(); // Check form validity
+                // if (isValid) {
+                    // Get the values from the modal form
+                    var resellerId = $('#reseller').val();
+                    var resellerName = $('#reseller option:selected').text(); // Fetch the selected text
+           
+                    var organizationId = $('#organization').val();
+                    var organizationName = $('#organization option:selected').text(); // Fetch the selected text
+
+
+                if (!resellerId || resellerId == "Select") {
+                            // alert("Please select a valid reseller.");
+                    $('.error-container-message').html('<div class="alert alert-danger" role="alert">Please select a valid reseller.</div>').show();
+                    return;
+                        }
+                if (!organizationId || organizationId == "Select") {
+                            //alert("Please select a valid organizationId.");
+                    $('.error-container-message').html('<div class="alert alert-danger" role="alert">Please select a valid organization.</div>').show();
+                    return;
+                        }
+                    // Get the form content and insert values
+                    var formContent = $('#hiddenFormContent').html();
+
+                    // Load the form into the container
+                    $('#formContainer').html(formContent);
+
+                    // Populate the form fields
+                    $('#OrganizationUserId').val(organizationId);
+                    $('#OrganizationUserName').val(organizationName);
+                    $('#ResellerUserName').val(resellerName);
+                    $('#ResellerUserId').val(resellerId);
+                    //$('#ResellerUserId').val(resellerName);
+                    //$('#ResellerUserId').attr('placeholder', resellerName);
+
+                    // Close the modal
+                    $("#myModal .close").click();
+                // }
+            });
+        });
+
+        function toggleSecondDiv() {
+            const secondDiv = document.getElementById('secondDiv');
+            if (secondDiv.style.display === 'none' || secondDiv.style.display === '') {
+                secondDiv.style.display = 'block';
+            } else {
+                secondDiv.style.display = 'none';
+            }
+        }
+
+
+        
+
+    </script>
+
+</body>
+</html>

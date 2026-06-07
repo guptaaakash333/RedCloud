@@ -1,0 +1,59 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+
+@* @model List<RedCloud.Models.StateVM>
+<label for="stateDropDown" class="dropdown">State</label>
+<select id="stateDropDown" name="StateId" class="dropdown" onchange="getallCitys();">
+    <option value="">Select a state</option>
+    @if (Model.Count > 0)
+    {
+        @foreach (var state in Model)
+        {
+            <option value="@state.StateId">@state.Name</option>
+        }       
+    }
+
+</select> *@
+
+
+@model IEnumerable<SelectListItem>
+<label for="stateDropDown" class="dropdown">State</label>
+<select id="stateDropDown" name="StateId" class="form-control" onchange="getallCitys();" required>
+    <option value="">Select a state</option>
+    @if (Model.Count() > 0)
+    {
+        @foreach (var state in Model)
+        {
+            <option value="@state.Value" selected="@state.Selected">@state.Text</option>
+        }
+    }
+
+</select>
+
+
+
+
+
+@section Scripts
+{
+    <script>
+        function getallCitys() {
+
+            var stateId = $('#stateDropDown').val();
+
+            $.ajax({
+
+                url: '@Url.Action("GetCityByStateId", "Home")',
+                data: { stateId: stateId },
+                type: 'GET',
+                success: function (data) {
+                    $('#cities').append(data);
+                }
+            });
+        }
+
+    </script>
+}

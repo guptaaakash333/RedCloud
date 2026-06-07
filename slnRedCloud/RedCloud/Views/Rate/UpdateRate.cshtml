@@ -1,0 +1,283 @@
+﻿@model RedCloud.Application.Features.Rates.Queries.RateDetailVM
+
+@{
+    ViewBag.Title = "Update Rate";
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .custom-card {
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 1cm;
+    }
+
+    .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #007bff;
+        color: white;
+        padding: 15px;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .logo-text {
+        display: flex;
+        align-items: center;
+    }
+
+        .logo-text img {
+            margin-right: 10px;
+            filter: invert(100%);
+        }
+
+        .logo-text p {
+            font-size: 24px;
+            color: white;
+            margin: 0;
+        }
+
+    .form-control-plaintext {
+        background-color: #f8f9fa;
+        border: none;
+        padding-left: 0;
+        color: #333333;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+    .text-center {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container-fluid mt-1">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="custom-card">
+                <div class="header-section">
+                    <div class="logo-text">
+                        <img src="https://files.axshare.com/gsc/5886BD/e2/ee/cb/e2eecb648f19481093d6b12d28c3beb3/images/view_user_details/u27.svg?pageId=45d84280-2bba-453f-a23a-42e8aeab14be" alt="Rate Details Logo">
+                        <p><strong>Update Reseller Rate Detail</strong></p>
+                    </div>
+                </div>
+                <form asp-action="UpdateRate" method="post">
+                    <input type="hidden" asp-for="RateId" />
+                    <input type="hidden" asp-for="ResellerAdminUserId" />
+                    <div class="row mt-4">
+                        <div class="col-md-6 form-group">
+                            <label for="ResellerName" class="rate-detail-label">@Html.DisplayNameFor(model => model.ResellerName):</label>
+                            <input type="text" id="ResellerName" class="form-control-plaintext" readonly value="@Model.ResellerName" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="MonthlyNumber" class="rate-detail-label">@Html.DisplayNameFor(model => model.MonthlyNumber):</label>
+                            <input type="text" id="MonthlyNumber" class="form-control" asp-for="MonthlyNumber" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="Users" class="rate-detail-label">@Html.DisplayNameFor(model => model.Users):</label>
+                            <input type="text" id="Users" class="form-control" asp-for="Users" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="InboundSMS" class="rate-detail-label">@Html.DisplayNameFor(model => model.InboundSMS):</label>
+                            <input type="text" id="InboundSMS" class="form-control" asp-for="InboundSMS" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="OutboundSMS" class="rate-detail-label">@Html.DisplayNameFor(model => model.OutboundSMS):</label>
+                            <input type="text" id="OutboundSMS" class="form-control" asp-for="OutboundSMS" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="InboundMMS" class="rate-detail-label">@Html.DisplayNameFor(model => model.InboundMMS):</label>
+                            <input type="text" id="InboundMMS" class="form-control" asp-for="InboundMMS" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="OutboundMMS" class="rate-detail-label">@Html.DisplayNameFor(model => model.OutboundMMS):</label>
+                            <input type="text" id="OutboundMMS" class="form-control" asp-for="OutboundMMS" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="Type" class="rate-detail-label">@Html.DisplayNameFor(model => model.Type):</label>
+                            <input type="text" id="Type" class="form-control-plaintext" readonly value="@Model.Type" />
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <a href="@Url.Action("ViewallRates", "Rate")" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+
+@*
+@model RedCloud.ViewModel.UpdateRateVm;
+
+
+@{
+    ViewBag.Title = "Update Rate";
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .custom-card {
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 1cm;
+    }
+
+    .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #007bff;
+        color: white;
+        padding: 15px;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .logo-text {
+        display: flex;
+        align-items: center;
+    }
+
+        .logo-text img {
+            margin-right: 10px;
+            filter: invert(100%);
+        }
+
+        .logo-text p {
+            font-size: 24px;
+            color: white;
+            margin: 0;
+        }
+
+    .form-control-plaintext {
+        background-color: #f8f9fa;
+        border: none;
+        padding-left: 0;
+        color: #333333;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+    .text-center {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container-fluid mt-1">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="custom-card">
+                <div class="header-section">
+                    <div class="logo-text">
+                        <img src="https://files.axshare.com/gsc/5886BD/e2/ee/cb/e2eecb648f19481093d6b12d28c3beb3/images/view_user_details/u27.svg?pageId=45d84280-2bba-453f-a23a-42e8aeab14be" alt="Rate Details Logo">
+                        <p><strong>Update Reseller Rate Detail</strong></p>
+                    </div>
+                </div>
+                <form asp-action="UpdateRate" method="post">
+                    <input type="hidden" asp-for="RateId" />
+                    <input type="hidden" asp-for="ResellerAdminUserId" />
+                    <div class="row mt-4">
+                        <div class="col-md-6 form-group">
+                            <label for="ResellerName" class="rate-detail-label">@Html.DisplayNameFor(model => model.ResellerName):</label>
+                            <input type="text" id="ResellerName" class="form-control-plaintext" readonly value="@Model.ResellerName" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="MonthlyNumber" class="rate-detail-label">@Html.DisplayNameFor(model => model.MonthlyNumber):</label>
+                            <input type="text" id="MonthlyNumber" class="form-control" asp-for="MonthlyNumber" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="Users" class="rate-detail-label">@Html.DisplayNameFor(model => model.Users):</label>
+                            <input type="text" id="Users" class="form-control" asp-for="Users" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="InboundSMS" class="rate-detail-label">@Html.DisplayNameFor(model => model.InboundSMS):</label>
+                            <input type="text" id="InboundSMS" class="form-control" asp-for="InboundSMS" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="OutboundSMS" class="rate-detail-label">@Html.DisplayNameFor(model => model.OutboundSMS):</label>
+                            <input type="text" id="OutboundSMS" class="form-control" asp-for="OutboundSMS" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="InboundMMS" class="rate-detail-label">@Html.DisplayNameFor(model => model.InboundMMS):</label>
+                            <input type="text" id="InboundMMS" class="form-control" asp-for="InboundMMS" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="OutboundMMS" class="rate-detail-label">@Html.DisplayNameFor(model => model.OutboundMMS):</label>
+                            <input type="text" id="OutboundMMS" class="form-control" asp-for="OutboundMMS" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="Type" class="rate-detail-label">@Html.DisplayNameFor(model => model.Type):</label>
+                            <input type="text" id="Type" class="form-control-plaintext" readonly value="@Model.Type" />
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <a href="@Url.Action("ViewallRates", "Rate")" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+*@

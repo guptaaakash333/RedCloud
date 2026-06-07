@@ -1,0 +1,136 @@
+﻿@model RedCloud.ViewModel.CampaignDetailsVM
+
+@{
+    ViewData["Title"] = "text";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .col-md-6 {
+        background-color: #f0f0f0;  /* Replace with your desired color */
+        padding: 20px; /* Optional: Add padding for better appearance */
+        border-radius: 5px; /* Optional: Add border radius for rounded corners */
+        margin-bottom: 20px; /* Optional: Add margin at the bottom for spacing */
+        color: #333; /* Text color */
+        border: 1px solid #ccc; /* Border for the div */
+        width: 300px; /* Width of the div */
+        margin: 20px auto; /* Centering the div */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional box shadow for better look */
+    }
+
+</style>
+
+<!-- Hidden div with form content -->
+<div id="hiddenFormContent">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">View Campaign </h3>
+                    </div>
+                    <form asp-controller="Campaign" asp-action="AddCampaign" method="post" id="campaign-form">
+                        <span asp-validation-summary="ModelOnly"></span>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="OrganizationUserId">Organization :</label>
+                                        @Html.DisplayFor(model => model.OrganizationUserName)
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ResellerUserId">Reseller :</label>
+                                        @Html.DisplayFor(model => model.ResellerUserName)
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="CompanyName">Legal Company Name :</label>
+                                        @Html.DisplayFor(model => model.CompanyName)
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="UniversalEIN">Universal EIN :</label>
+                                        @Html.DisplayFor(model => model.UniversalEIN)
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="BrandId">Brand ID :</label>
+                                        @Html.DisplayFor(model => model.BrandId)
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="IdentityStatus">Identity Status :</label>
+                                        @Html.DisplayFor(model => model.IdentityStatus)
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="BrandRelationship">Brand Relationship :</label>
+                                        @Html.DisplayFor(model => model.BrandRelationship)
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="BrandRegistrationDate">Brand Registration Date :</label>
+                                        @Html.DisplayFor(model => model.BrandRegistrationDate)
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <h3 class="section-title"> Campaign </h3>
+                            <hr />
+                            <div class="container mt-5">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="CampaignIdOne">Campaign ID One :</label>
+                                            @Html.DisplayFor(model => model.CampaignIdOne)
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="UseCaseOne">Use Case One :</label>
+                                            @Html.DisplayFor(model => model.UseCaseOne)
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="RegistrationDateOne">Registration Date One :</label>
+                                            @Html.DisplayFor(model => model.RegistrationDateOne)
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="RenewalDateOne">Renewal Date One :</label>
+                                            @Html.DisplayFor(model => model.RenewalDateOne)
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="CampaignDescriptionOne">Campaign Description One :</label>
+                                            @Html.DisplayFor(model => model.CampaignDescriptionOne)
+                                        </div>
+                                    </div>
+                                    @if(Model.CampaignIdTwo != null) {
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="CampaignIdTwo">Campaign ID Two :</label>
+                                                @Html.DisplayFor(model => model.CampaignIdTwo)
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="UseCaseTwo">Use Case Two :</label>
+                                                @Html.DisplayFor(model => model.UseCaseTwo)
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="RegistrationDateTwo">Registration Date Two :</label>
+                                                @Html.DisplayFor(model => model.RegistrationDateTwo)
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="RenewalDateTwo">Renewal Date Two :</label>
+                                                @Html.DisplayFor(model => model.RenewalDateTwo)
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="CampaignDescriptionTwo">Campaign Description Two :</label>
+                                                @Html.DisplayFor(model => model.CampaignDescriptionTwo)
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-right">
+                            <a class="btn btn-secondary ml-3" asp-action="CampaignViewDetail" asp-controller="Campaigndetail">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

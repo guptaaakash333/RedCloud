@@ -1,0 +1,196 @@
+﻿@* @model RedCloud.Domain.Entities.Rate
+@{
+    ViewData["Title"] = "Admin User Form";
+    Layout = "_Layout";
+}
+
+<style>
+
+    .required::before {
+        content: "*";
+        color: red;
+        margin-right: 3px;
+    }
+
+    .mandatory-message {
+        color: red;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="container-fluId d-flex justify-content-center align-items-center vh-100" style="background-color:white">
+
+    <div class="col-md-12">
+
+        <div class="card card-primary">
+            <div class="card-header bg-primary">
+                <h3 class="card-title">Admin User Form</h3>
+            </div>
+         
+            <form asp-action="AddAdmin" method="post">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label asp-for="ResellerAdminUserId" class="control-label"></label>
+                        <input asp-for="ResellerAdminUserId" class="form-control" />
+                        
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Type" class="control-label"></label>
+                        <input asp-for="Type" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="InboundSMS" class="control-label"></label>
+                        <input asp-for="InboundSMS" class="form-control" />
+                       
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="OutboundSMS" class="control-label"></label>
+                        <input asp-for="OutboundSMS" class="form-control" />
+                        
+                    </div>
+
+                    <div class="form-group form-check">
+                        <label asp-for="InboundMMS" class="control-label"></label>
+                        <input asp-for="InboundMMS" class="form-control" />
+                    </div>
+                    <div class="form-group form-check">
+                        <label asp-for="OutboundMMS" class="control-label"></label>
+                        <input asp-for="OutboundMMS" class="form-control" />
+                    </div>
+                    <div class="form-group form-check">
+                        <label asp-for="MonthlyNumber" class="control-label"></label>
+                        <input asp-for="MonthlyNumber" class="form-control" />
+                    </div>
+                    <div class="form-group form-check">
+                        <label asp-for="Users" class="control-label"></label>
+                        <input asp-for="Users" class="form-control" />
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Add Rate</button>
+                    <button type="button" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValIdationScriptsPartial" />
+} *@
+
+@model RedCloud.Domain.Entities.Rate
+
+@{
+    ViewData["Title"] = "Rate Form";
+    Layout = "_Layout";
+}
+
+<style>
+    .required::before {
+        content: "*";
+        color: red;
+        margin-right: 3px;
+    }
+
+    .mandatory-message {
+        color: red;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="container-fluid d-flex justify-content-center align-items-center vh-100" style="background-color:white">
+    <div class="col-md-12">
+        <div class="card card-primary">
+            <div class="card-header bg-primary">
+                <h3 class="card-title">ADD RATE</h3>
+            </div>
+            <div class="mandatory-message">
+                * marked fields are mandatory.
+            </div>
+            <form asp-action="AddRate" method="post">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                           
+                            
+                           @*  <div class="form-group">
+                                <label asp-for="ResellerAdminUserId" class="control-label"></label>
+                                <select asp-for="ResellerAdminUserId" asp-items="@ViewBag.Resellers" class="form-control">
+                                    <option value="">Select Reseller</option>
+                                </select>
+                                <span asp-validation-for="ResellerAdminUserId" class="text-danger"></span>
+                            </div> *@
+
+                            <div class="form-group">
+                                <label asp-for="ResellerAdminUserId" class="control-label">Reseller Name</label>
+                                <select asp-for="ResellerAdminUserId" asp-items="@ViewBag.Resellers" class="form-control" onchange="updateResellerName(this)">
+                                    <option value="">Select Reseller</option>
+                                </select>
+                                <input type="hidden" id="ResellerName" name="ResellerName" />
+                                <span asp-validation-for="ResellerAdminUserId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Type" class="control-label required"></label>
+                                <input asp-for="Type" class="form-control" value="Postpaid/Unlimited" />
+                                <span asp-validation-for="Type" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="InboundSMS" class="control-label"></label>
+                                <input asp-for="InboundSMS" class="form-control" />
+                                <span asp-validation-for="InboundSMS" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="OutboundSMS" class="control-label"></label>
+                                <input asp-for="OutboundSMS" class="form-control" />
+                                <span asp-validation-for="OutboundSMS" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="InboundMMS" class="control-label"></label>
+                                <input asp-for="InboundMMS" class="form-control" />
+                                <span asp-validation-for="InboundMMS" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="OutboundMMS" class="control-label"></label>
+                                <input asp-for="OutboundMMS" class="form-control" />
+                                <span asp-validation-for="OutboundMMS" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="MonthlyNumber" class="control-label"></label>
+                                <input asp-for="MonthlyNumber" class="form-control" />
+                                <span asp-validation-for="MonthlyNumber" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Users" class="control-label"></label>
+                                <input asp-for="Users" class="form-control" />
+                                <span asp-validation-for="Users" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Add Rate</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='@Url.Action("Viewallrates", "Rate")'">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function updateResellerName(select) {
+            var resellerName = select.options[select.selectedIndex].text;
+            document.getElementById('ResellerName').value = resellerName;
+        }
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}
+ 
+

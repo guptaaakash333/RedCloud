@@ -1,0 +1,264 @@
+﻿ @model RedCloud.Application.Features.Numbers.Queries.ViewAssignedNumberVM 
+
+@* @model RedCloud.Application.Features.Numbers.Commands.AssignNumberViewModel *@
+            @using RedCloud.ViewModel;
+
+@{
+    ViewData["Title"] = "UpdateAssignedNumber";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>UpdateAssignedNumber</h1>
+
+
+<hr />
+
+
+
+@{
+    var selectedCountryId = Model.CountryId;
+    var selectedStateId = Model.StateId;
+    
+    IEnumerable<CountryVM> countries = (IEnumerable<CountryVM>)ViewBag.Country;
+    IEnumerable<StateVM> states = (IEnumerable<StateVM>)ViewBag.State;
+    
+    IEnumerable<SelectListItem> countrySelectList = countries.Select(c => new SelectListItem
+            {
+                Value = c.CountryId.ToString(),
+                Text = c.Name,
+                Selected = c.CountryId == selectedCountryId
+
+            });
+    IEnumerable<SelectListItem> stateSelectList = states.Select(c => new SelectListItem
+            {
+                Value = c.StateId.ToString(),
+                Text = c.Name,
+                Selected = c.StateId == selectedStateId
+
+            });
+   
+
+
+}
+
+
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Update Assigned Number</h3>
+                    </div>
+                  
+                    <form asp-action="UpdateAssignedNumber" method="post">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                      
+                                            <input type="hidden" asp-for="NumberId" />
+                                          
+
+
+                                            <div class="form-group">
+                                                <label asp-for="PhoneNumber"></label>
+                                                <span class="form-control">@Model.PhoneNumber</span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label asp-for="RateCenter"></label>
+                                                <span class="form-control">@Model.RateCenter</span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label asp-for="CountryName"></label>
+                                                <span class="form-control">@Model.CountryName</span>
+                                            </div>
+
+                                        <div class="form-group">
+                                            <label asp-for="StateName"></label>
+                                            <span class="form-control">@Model.StateName</span>
+                                        </div>
+
+
+                                            <div class="form-group">
+                                                <label asp-for="TypeName"></label>
+                                                <span class="form-control">@Model.TypeName</span>
+                                            </div>
+
+
+                                           
+
+                                            <div class="form-group">
+                                                <label asp-for="CarrierName"></label>
+                                                <span class="form-control">@Model.CarrierName</span>
+                                            </div>
+
+
+
+
+                                       <label for="ResellerName">Reseller Name</label>
+
+                                        <select asp-for="ResellerAdminUserId" class="form-control">
+                                            @{
+                                                foreach (var item in ViewBag.ResellerList)
+                                                {
+                                                    <option value="@item.Value">@item.Text</option>
+                                                }
+                                            }
+                                        </select>
+                                    <span asp-validation-for="ResellerName" class="text-danger"></span>
+
+                                    <label for="OrgName">Organization Name</label>
+
+                                    <select asp-for="OrgID" class="form-control">
+                                        @{
+                                            foreach (var item in ViewBag.Orgadmin)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        }
+                                    </select>
+
+                                    <span asp-validation-for="OrgName" class="text-danger"></span>
+
+                                    <label for="Assignmentname">AssignmentName</label>
+
+                                    <select asp-for="AssignmentTypeId" class="form-control">
+                                        @{
+                                            foreach (var item in ViewBag.Assignmenttype)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        }
+                                    </select>
+                                    <span asp-validation-for="AssignmentTypeName" class="text-danger"></span>
+
+
+                                    <label for="CarrierName">CarrierName</label>
+
+                                    <select asp-for="CarrierId" class="form-control">
+                                        @{
+                                            foreach (var item in ViewBag.AdminList)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        }
+                                    </select>
+                                    <span asp-validation-for="CarrierName" class="text-danger"></span>
+
+
+
+                                   
+                                        <label for="CampaignId">CampaignId</label>
+                                        <select asp-for="CampaignId" class="form-control" asp-items="@(ViewBag.Campaignlist as SelectList)" required>
+                                            <option value="">Select CampaignId</option>
+                                        </select>
+
+                                        <span asp-validation-for="CampaignId" class="text-danger"></span>
+                             
+
+                                    <div class="form-group" id="datepicker">
+                                        <label for="StartDate">Start Date</label>
+                                        <input asp-for="StartDate" type="date" class="form-control datepicker" id="date" placeholder="Select start date" required>
+                                        <span asp-validation-for="StartDate" class="text-danger"></span>
+
+                                    </div>
+
+
+                                    <div class="form-group" id="datepicker1">
+                                        <label for="EndDate">End Date</label>
+                                        <input asp-for="EndDate" type="date" class="form-control datepicker" id="date2" placeholder="Select end date" required>
+                                        <span asp-validation-for="EndDate" class="text-danger"></span>
+
+                                    </div>
+
+
+                                      
+
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary ml-3">Update</button>
+                    </form>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Bootstrap Datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Bootstrap Datepicker JS -->
+
+
+    <style>
+        .input - group - append {
+            cursor: pointer;
+        }
+    </style>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+        <script>
+
+
+
+
+
+            $(document).ready(function () {
+                $('#countryDropDown').change(function () {
+                    var countryId = $('#countryDropDown').val();
+                    $.ajax({
+                        url: '@Url.Action("GetStateByCountryId", "Dropdown")',
+                        data: { countryId: countryId },
+                        type: 'GET',
+                        success: function (data) {
+                            $('#states').empty();
+                            $('#cityDropdown').empty();
+                            $('#cityDropdown').append("<option>Select a city</option>");
+
+                            $('#states').append(data);
+                        }
+                    });
+                });
+
+            });
+
+
+
+
+            function getallCitys() {
+                alert("METHOD CALLED")
+                var stateId = $('#stateDropDown').val();
+
+                $.ajax({
+
+                    url: '@Url.Action("GetCityByStateId", "Dropdown")',
+                    data: { stateId: stateId },
+                    type: 'GET',
+                    success: function (data) {
+                        $('#cities').empty();
+                        $('#cities').append(data);
+
+                    }
+                });
+            }
+
+
+
+           
+        </script>
+    }
+</body>
+

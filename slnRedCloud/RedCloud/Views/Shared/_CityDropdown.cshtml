@@ -1,0 +1,17 @@
+﻿
+
+
+
+@model IEnumerable<SelectListItem>
+<label for="cityDropDown" class="dropdown">City</label>
+<select id="cityDropdown" name="CityId" class="form-control" required>
+    <option value="">Select a city</option>
+    @if (Model.Count() > 0)
+    {
+        @foreach (var city in Model)
+        {
+          <option value="@city.Value" selected="@city.Selected">@city.Text</option>
+        }
+    }
+
+</select>

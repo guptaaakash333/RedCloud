@@ -1,0 +1,250 @@
+﻿@model RedCloud.ViewModel.OrganizationAdminVM;
+@using RedCloud.ViewModel;
+
+@{
+    IEnumerable<CountryVM> countries = (IEnumerable<CountryVM>)ViewBag.Country;
+    IEnumerable<SelectListItem> countrySelectList = countries.Select(c => new SelectListItem
+            {
+                Value = c.CountryId.ToString(),
+                Text = c.Name,
+            });
+    List<SelectListItem> stateList = new List<SelectListItem>();
+    List<SelectListItem> cityList = new List<SelectListItem>();
+}
+
+
+
+
+
+<body>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Create Organization Admin</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form asp-action="AddOrganizationAdmin" method="post" id="user-query-form">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="OrgName">Organization Name</label>
+                                        <input asp-for="OrgName" class="form-control" id="OrgName" placeholder="Enter organization name">
+                                        <span asp-validation-for="OrgName" class="text-danger"></span>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="OrgAdminName">Admin Name</label>
+                                        <input asp-for="OrgAdminName" class="form-control" id="OrgAdminName" placeholder="Enter admin name">
+                                        <span asp-validation-for="OrgAdminName" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="EIN">EIN Number</label>
+                                        <input asp-for="EIN" class="form-control" id="EIN" placeholder="Enter EIN Number">
+                                        <span asp-validation-for="EIN" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="OrgAdminEmail">Admin Email</label>
+                                        <input asp-for="OrgAdminEmail" class="form-control" id="OrgAdminEmail" placeholder="Enter admin email">
+                                        <span asp-validation-for="OrgAdminEmail" class="text-danger"></span>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="OrgAdminMobNo">Admin Mobile Number</label>
+                                        <input asp-for="OrgAdminMobNo" class="form-control" id="OrgAdminMobNo" placeholder="Enter admin mobile number">
+                                        <span asp-validation-for="OrgAdminMobNo" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="AddressLineOne">Address Line 1</label>
+                                        <input asp-for="AddressLineOne" class="form-control" id="AddressLineOne" placeholder="Enter address line 1">
+                                        <span asp-validation-for="AddressLineOne" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="AddressLineTwo">Address Line 2</label>
+                                        <input asp-for="AddressLineTwo" class="form-control" id="AddressLineTwo" placeholder="Enter address line 2">
+                                        <span asp-validation-for="AddressLineTwo" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        @Html.Partial("_CountryDropDown", countrySelectList)
+                                        <span asp-validation-for="CountryId" class="text-danger"></span>
+
+                                    </div>
+                                    <div id="states" class="form-group">
+
+
+                                        @Html.Partial("_StateDropDown", stateList)
+                                        <span asp-validation-for="StateId" class="text-danger"></span>
+
+
+                                    </div>
+
+
+
+                                    <div id="cities" class="form-group">
+
+
+                                        @Html.Partial("_CityDropDown", cityList)
+                                        <span asp-validation-for="CityId" class="text-danger"></span>
+
+
+                                        <input type="hidden" id="CountryId" name="CountryId" />
+                                        <input type="hidden" id="StateId" name="StateId" />
+                                        <input type="hidden" id="CityId" name="CityId" />
+
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="ZipCode">Zip Code</label>
+                                        <input asp-for="ZipCode" class="form-control" type="number" id="ZipCode" placeholder="Enter zip code" required>
+                                        <span asp-validation-for="ZipCode" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="OrgURL">Organization URL</label>
+                                        <input asp-for="OrgURL" class="form-control" id="OrgURL" placeholder="Enter organization URL" required>
+                                        <span asp-validation-for="OrgURL" class="text-danger"></span>
+                                    </div>
+                                    
+                                    <div class="form-group">
+
+                                    <label for="ResellerName">Reseller Name</label>
+
+                                    <select asp-for="ResellerId" class="form-control" asp-items="@ViewBag.ResellerList" required>
+                                    <option value="">Select Reseller</option>
+                                    </select>
+                                    <span asp-validation-for="ResellerId" class="text-danger"></span>
+
+
+                                    </div>
+
+                               @*      <div class="modal-box">
+                                         <div class="sd-multiSelect form-group"> 
+                                            <label for="current-job-role">Multi Select</label>
+                                            <select multiple id="current-job-role" class="sd-CustomSelect">
+                                                <option value="1">Option 1</option>
+                                                <option value="2">Option 2</option>
+                                                <option value="3">Option 3</option>
+                                                <option value="4">Option 4</option>
+                                                <option value="2">Option 2</option>
+                                                <option value="3">Option 3</option>
+                                                <option value="4">Option 4</option>
+                                            </select>
+                                         </div> 
+                                    </div> *@
+
+
+                                 
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a class="btn btn-primary ml-3" style="float:right; margin-right:20px; margin-bottom:20px;background-color:grey; border:none; width: 100px;"
+                               asp-action="ViewOrganizationAdmin" asp-controller="OrganizationAdmin">Back</a>
+                            <button type="submit" class="btn btn-primary ml-3" style="float:right; margin-bottom:20px; width: 100px;">Create</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+    </div>
+
+
+
+
+</body>
+
+
+
+@section Scripts {
+
+  
+    <partial name="_ValIdationScriptsPartial" />
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://bsite.net/savrajdutta/cdn/multi-select.js">
+
+        <partial name="_ValidationScriptsPartial" />
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+
+            $('#countryDropDown').change(function () {
+                var countryId = $('#countryDropDown').val();
+
+
+                $.ajax({
+                    url: '@Url.Action("GetStateByCountryId", "Dropdown")',
+                    data: { countryId: countryId },
+                    type: 'GET',
+                    success: function (data) {
+                        $('#states').empty();
+                        $('#cityDropdown').empty();
+                        $('#cityDropdown').append("<option>Select a city</option>");
+
+                        $('#states').append(data);
+
+
+                    }
+                });
+            });
+
+
+
+        });
+
+        function getallCitys() {
+
+            var stateId = $('#stateDropDown').val();
+
+
+            $.ajax({
+
+                url: '@Url.Action("GetCityByStateId", "Dropdown")',
+                data: { stateId: stateId },
+                type: 'GET',
+                success: function (data) {
+                    $('#cities').empty();
+                    $('#cities').append(data);
+
+                }
+            });
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        // $(".sd-CustomSelect").multipleSelect({
+        //     selectAll: false,
+        //     onOptgroupClick: function (view) {
+        //         $(view).parents("label").addClass("selected-optgroup");
+        //     }
+        // });
+
+
+
+
+    </script>
+
+
+}
+
+

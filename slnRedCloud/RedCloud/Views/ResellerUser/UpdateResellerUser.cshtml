@@ -1,0 +1,112 @@
+﻿@model RedCloud.ViewModel.ResellerUserVM;
+
+
+
+
+
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Update Reseller User</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form asp-action="UpdateResellerUser" method="post">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input type="hidden" asp-for="ResellerAdminUserId" />
+                                        <input type="hidden" asp-for="ResellerUserId" />
+                                        <input type="hidden" asp-for="IsActive" />
+
+                                        <label for="OrganizationUserFirstName">First Name</label>
+                                        <input asp-for="FirstName" class="form-control" id="OrgName" placeholder="Enter ResellerUser name">
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="LastName">Last Name</label>
+                                        <input asp-for="LastName" class="form-control" placeholder="Enter ResellerUser name  />
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="Email">Email</label>
+                                        <input asp-for="Email" class="form-control" id="Email" placeholder="Enter Email Number">
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <a class="btn btn-primary ml-3" style="float:right; margin-right:20px; margin-bottom:20px;background-color:grey; border:none; width: 100px;"
+                           asp-action="ViewResellerUsers" asp-controller="ResellerUser">Back</a>
+
+                        <button type="submit" class="btn btn-primary ml-3" style="float:right; margin-bottom:20px; width: 100px;">Update</button>
+
+                    </form>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS -->
+
+</body>
+
+
+@section Scripts {
+    <partial name="_ValIdationScriptsPartial" />
+    <script>
+
+        $(document).ready(function () {
+            $('#countryDropDown').change(function () {
+                var countryId = $('#countryDropDown').val();
+
+
+                $.ajax({
+                    url: '@Url.Action("GetStateByCountryId", "Dropdown")',
+                    data: { countryId: countryId },
+                    type: 'GET',
+                    success: function (data) {
+                        $('#states').empty();
+                        $('#cityDropdown').empty();
+                        $('#cityDropdown').append("<option>Select a city</option>");
+
+                        $('#states').append(data);
+                    }
+                });
+            });
+
+
+
+        });
+
+        function getallCitys() {
+            alert("METHOD CALLED")
+            var stateId = $('#stateDropDown').val();
+
+
+            $.ajax({
+
+                url: '@Url.Action("GetCityByStateId", "Dropdown")',
+                data: { stateId: stateId },
+                type: 'GET',
+                success: function (data) {
+                    $('#cities').empty();
+                    $('#cities').append(data);
+
+                }
+            });
+        }
+
+
+
+
+    </script>
+}

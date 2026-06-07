@@ -1,0 +1,73 @@
+﻿@model RedCloud.Application.Features.Reseller.AssignCredit.Queries.AssignCreditDetailsVM
+
+<style>
+    .hiddenId {
+        display: none;
+    }
+</style>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">View Rate</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form asp-action="" method="" id="user-query-form">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="OrgID">Organization :</label>
+                                    @Html.DisplayFor(model => model.OrgName)
+                                </div>
+                                <div class="form-group">
+                                    <label for="TypeId">Type</label>
+                                    @Html.DisplayFor(model => model.TypeName)
+                                </div>
+                                <div class="form-group">
+                                    <label for="InboundSMS">InboundSMS</label>
+                                    @Html.DisplayFor(model => model.InboundSMS)
+                                </div>
+                                <div class="form-group">
+                                    <label for="OutboundSMS">OutboundSMS</label>
+                                    @Html.DisplayFor(model => model.OutboundSMS)
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="InboundMMS">InboundMMS</label>
+                                    @Html.DisplayFor(model => model.InboundMMS)
+                                </div>
+                                <div class="form-group">
+                                    <label for="OutboundMMS">OutboundMMS</label>
+                                    @Html.DisplayFor(model => model.OutboundMMS)
+                                </div>
+                                <div class="form-group">
+                                    <label for="MonthlyNumber">MonthlyNumber</label>
+                                    @Html.DisplayFor(model => model.MonthlyNumber)
+                                </div>
+                                <div class="form-group">
+                                    <label for="Users">Users</label>
+                                    @Html.DisplayFor(model => model.Users)
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-5"></div>
+                            <div class="card-footer text-right">
+                                <a class="btn btn-secondary ml-3" asp-action="ListRate" asp-controller="ResellerAssignCredit">Back</a>
+                            </div>
+                            @* <div class="col-2">
+                                <button type="submit" class="btn btn-primary ml-3">Update</button>
+                            </div> *@
+                            <div class="col-5"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
